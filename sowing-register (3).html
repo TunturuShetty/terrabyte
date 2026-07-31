@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Sowing Register — a garden almanac for your field</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Petit+Formal+Script&family=Special+Elite&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════════════════════════
+   TOKENS
+   ════════════════════════════════════════════════════════════ */
+:root{
+  --cream:#F8F2E4;
+  --parchment:#EFE4CB;
+  --page:#F4EBD6;
+  --fern:#6E8552;
+  --moss:#4A5C36;
+  --forest:#1E2F19;
+  --orchid:#7E5B84;
+  --orchid-lt:#C9AAD0;
+  --blush:#D3A29D;
+  --gold:#B08A46;
+  --ink:#26301F;
+  --ink-soft:#55603F;
+
+  --display:"Cormorant Garamond",Georgia,serif;
+  --body:"EB Garamond",Georgia,serif;
+  --util:"Jost",system-ui,sans-serif;
+  --script:"Petit Formal Script",cursive;
+  --type:"Special Elite","Courier New",monospace;
+
+  --ease:cubic-bezier(.22,.68,.24,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.66;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+
+.eyebrow{font-family:var(--util);font-weight:500;font-size:.62rem;letter-spacing:.38em;text-transform:uppercase}
+.script{font-family:var(--script);font-weight:400;line-height:1.25}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* paper grain over everything */
+body::after{
+  content:"";position:fixed;inset:0;z-index:900;pointer-events:none;opacity:.4;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+
+/* ════════════════════════════════════════════════════════════
+   NAV
+   ════════════════════════════════════════════════════════════ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;
+  gap:20px;padding:16px 32px;background:rgba(248,242,228,.86);backdrop-filter:blur(9px);
+  border-bottom:1px solid rgba(38,48,31,.14);transition:transform .45s var(--ease)}
+.nav.up{transform:translateY(-102%)}
+.nav a{color:inherit;text-decoration:none}
+.nav-links{display:flex;gap:26px;font-family:var(--util);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase}
+.nav-links a{opacity:.68;transition:opacity .2s}
+.nav-links a:hover{opacity:1}
+.nav-brand{text-align:center;line-height:1.1}
+.nav-brand b{font-family:var(--display);font-weight:500;font-size:1.12rem;letter-spacing:.18em;text-transform:uppercase;display:block}
+.nav-brand span{font-family:var(--script);font-size:.9rem;color:var(--fern)}
+.pill{background:var(--blush);color:#4A2F2C;border:0;cursor:pointer;border-radius:40px;padding:11px 24px;
+  font-family:var(--util);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;transition:.25s var(--ease)}
+.pill:hover{background:var(--orchid);color:var(--cream)}
+@media(max-width:900px){.nav-links,.nav .pill{display:none}.nav{justify-content:center}}
+
+/* ════════════════════════════════════════════════════════════
+   HERO — the garden
+   ════════════════════════════════════════════════════════════ */
+.hero{position:relative;min-height:100svh;display:grid;place-items:center;overflow:hidden;padding:120px 20px 80px;isolation:isolate}
+.hero-sky{position:absolute;inset:0;z-index:-4;
+  background:
+    radial-gradient(120% 80% at 50% 0%, #F6EFDD 0%, #E8E2C8 34%, #C9CFA4 62%, #93A473 82%, #5F7550 100%);}
+.hero-haze{position:absolute;inset:0;z-index:-3;
+  background:
+    radial-gradient(60% 40% at 18% 26%, rgba(255,252,240,.75), transparent 70%),
+    radial-gradient(50% 34% at 82% 34%, rgba(255,250,238,.6), transparent 70%),
+    radial-gradient(80% 50% at 50% 104%, rgba(30,47,25,.62), transparent 70%);}
+.hero-far,.hero-near{position:absolute;left:-4%;width:108%;z-index:-2;pointer-events:none}
+.hero-far{top:-2%;filter:blur(2.2px);opacity:.62}
+.hero-near{bottom:-1%;z-index:-1}
+.hero-side{position:absolute;top:0;bottom:0;width:28vw;max-width:360px;z-index:-1;pointer-events:none;opacity:.95}
+.hero-side.l{left:-3%}
+.hero-side.r{right:-3%;transform:scaleX(-1)}
+@media(max-width:900px){.hero-side{width:46vw;opacity:.75}}
+
+.arch{position:relative;text-align:center;max-width:720px;padding:74px 46px 60px;z-index:2}
+.arch::before{content:"";position:absolute;inset:0;border:1px solid rgba(248,242,228,.55);
+  border-radius:50% 50% 6px 6px / 30% 30% 3px 3px;background:rgba(31,48,25,.24);backdrop-filter:blur(3px);z-index:-1}
+.arch::after{content:"";position:absolute;inset:9px;border:1px solid rgba(248,242,228,.28);
+  border-radius:50% 50% 4px 4px / 30% 30% 2px 2px;z-index:-1}
+.hero h1{font-family:var(--display);font-weight:300;color:var(--cream);margin:14px 0 0;
+  font-size:clamp(2.6rem,7.4vw,5.4rem);line-height:.98;letter-spacing:.01em}
+.hero h1 em{display:block;font-style:normal;letter-spacing:.22em;font-size:.42em;font-weight:400;
+  text-transform:uppercase;margin-bottom:10px;color:rgba(248,242,228,.82)}
+.hero .flourish{font-family:var(--script);font-size:clamp(1.6rem,4.4vw,2.8rem);color:var(--blush);margin-top:6px}
+.hero .eyebrow{color:rgba(248,242,228,.72)}
+.hero p.lede{color:rgba(248,242,228,.9);max-width:44ch;margin:20px auto 0;font-size:1.04rem}
+.hero-cta{margin-top:30px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;cursor:pointer;border:0;text-decoration:none;font-family:var(--util);
+  font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;padding:15px 34px;border-radius:40px;transition:.28s var(--ease)}
+.btn-solid{background:var(--cream);color:var(--forest)}
+.btn-solid:hover{background:var(--blush);transform:translateY(-2px)}
+.btn-line{background:transparent;color:var(--cream);border:1px solid rgba(248,242,228,.5)}
+.btn-line:hover{background:rgba(248,242,228,.14)}
+
+/* drifting petals */
+.petals{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.petal{position:absolute;top:-8%;opacity:0;animation:drift linear infinite}
+@keyframes drift{
+  0%{opacity:0;transform:translate3d(0,-10vh,0) rotate(0deg)}
+  8%{opacity:.85}
+  92%{opacity:.7}
+  100%{opacity:0;transform:translate3d(14vw,112vh,0) rotate(520deg)}
+}
+
+/* ════════════════════════════════════════════════════════════
+   BANDS
+   ════════════════════════════════════════════════════════════ */
+.band{position:relative;padding:96px 24px;overflow:hidden}
+.band-cream{background:var(--cream)}
+.band-olive{background:linear-gradient(180deg,#7C8C5C,#6B7C4E)}
+.band-forest{background:radial-gradient(120% 90% at 50% 0%,#31462A,#182415 78%)}
+.inner{max-width:1180px;margin:0 auto;position:relative;z-index:3}
+.watermark{position:absolute;pointer-events:none;z-index:1;opacity:.5}
+
+.sec-head{text-align:center;margin-bottom:52px}
+.sec-head .eyebrow{color:var(--gold)}
+.sec-head h2{font-family:var(--display);font-weight:300;font-size:clamp(2.2rem,5.2vw,3.6rem);margin:12px 0 0;line-height:1.05}
+.sec-head .script{font-size:clamp(1.4rem,3.4vw,2.1rem);color:var(--orchid);margin-top:2px}
+.sec-head p{max-width:52ch;margin:16px auto 0;color:var(--ink-soft)}
+.band-olive .sec-head h2,.band-forest .sec-head h2{color:var(--cream)}
+.band-olive .sec-head p,.band-forest .sec-head p{color:rgba(248,242,228,.82)}
+.band-olive .sec-head .eyebrow,.band-forest .sec-head .eyebrow{color:var(--blush)}
+.band-olive .sec-head .script,.band-forest .sec-head .script{color:var(--orchid-lt)}
+
+.divider{display:flex;align-items:center;gap:18px;justify-content:center;margin:0 auto;max-width:560px}
+.divider i{flex:1;height:1px;background:currentColor;opacity:.28}
+
+/* philosophy */
+.philo{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+.philo h3{font-family:var(--display);font-weight:400;font-size:clamp(1.9rem,4vw,2.9rem);margin:0 0 18px;line-height:1.1}
+.philo p{color:var(--ink-soft);max-width:46ch}
+.philo .quote{font-family:var(--script);font-size:1.5rem;color:var(--fern);margin-top:26px;transform:rotate(-2.2deg);max-width:30ch}
+.oval{position:relative;aspect-ratio:4/5;border-radius:50%/38% 38% 34% 34%;overflow:hidden;
+  border:1px solid rgba(38,48,31,.28);box-shadow:0 26px 60px -30px rgba(30,47,25,.6)}
+.oval-art{position:absolute;inset:0;background:
+  radial-gradient(90% 60% at 50% 8%, #EFE8CF, #C3CE9E 40%, #7E9161 72%, #3E5232 100%)}
+.oval-frame{position:absolute;inset:-11px;border:1px solid rgba(38,48,31,.3);border-radius:50%/38% 38% 34% 34%}
+@media(max-width:900px){.philo{grid-template-columns:1fr;gap:40px}}
+
+/* ════════════════════════════════════════════════════════════
+   FORM
+   ════════════════════════════════════════════════════════════ */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.card{position:relative;background:var(--cream);border-radius:190px 190px 10px 10px;padding:64px 44px 44px;
+  box-shadow:0 30px 70px -40px rgba(24,36,21,.75);overflow:hidden}
+.card::before{content:"";position:absolute;inset:11px;border:1px solid rgba(38,48,31,.2);
+  border-radius:180px 180px 6px 6px;pointer-events:none}
+.card-wm{position:absolute;right:-30px;bottom:-30px;opacity:.16;pointer-events:none}
+.card-head{text-align:center;margin-bottom:30px;position:relative;z-index:2}
+.card-head .rn{font-family:var(--util);font-size:.6rem;letter-spacing:.3em;color:var(--gold)}
+.card-head h3{font-family:var(--display);font-weight:400;font-size:2rem;margin:6px 0 0}
+.card-head .script{color:var(--fern);font-size:1.15rem}
+.card-body{position:relative;z-index:2}
+@media(max-width:900px){.cards{grid-template-columns:1fr}.card{padding:54px 26px 36px;border-radius:150px 150px 10px 10px}}
+
+.field{position:relative;padding:12px 0 8px;border-bottom:1px solid rgba(38,48,31,.24);transition:border-color .22s}
+.field:focus-within{border-bottom-color:var(--fern)}
+.field.bad{border-bottom-color:#A8452F}
+.field-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.field label{font-family:var(--util);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)}
+.field .unit{font-family:var(--util);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fern)}
+.field input{width:100%;border:0;background:transparent;outline:none;color:var(--ink);
+  font-family:var(--display);font-weight:400;font-size:1.75rem;padding:2px 0 0}
+.field input::placeholder{color:rgba(38,48,31,.22)}
+.field input[type=date]{font-family:var(--util);font-size:1rem}
+.field .err{display:none;font-family:var(--util);font-size:.58rem;letter-spacing:.1em;color:#A8452F;padding-top:4px}
+.field.bad .err{display:block}
+.triple{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+
+.ph-scale{margin-top:14px}
+.ph-track{position:relative;height:6px;border-radius:6px;background:linear-gradient(90deg,#C99B4B,#A9BE7C,#7E97B4)}
+.ph-mark{position:absolute;top:-6px;left:50%;width:2px;height:18px;background:var(--ink);transition:left .4s var(--ease)}
+.ph-mark::after{content:"";position:absolute;top:-4px;left:-3px;width:8px;height:8px;background:var(--ink);transform:rotate(45deg)}
+.ph-legend{display:flex;justify-content:space-between;font-family:var(--util);font-size:.53rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--fern);margin-top:7px}
+
+.ghost{margin-top:20px;display:inline-flex;align-items:center;gap:9px;background:transparent;
+  border:1px solid rgba(38,48,31,.3);border-radius:40px;color:var(--ink);cursor:pointer;
+  font-family:var(--util);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;padding:11px 20px;transition:.24s var(--ease)}
+.ghost:hover{border-color:var(--fern);background:rgba(110,133,82,.12)}
+.ghost:disabled{opacity:.5;cursor:progress}
+.note{font-family:var(--util);font-size:.58rem;letter-spacing:.1em;color:var(--fern);margin-top:9px;min-height:1em}
+
+.forecast{margin-top:22px;max-height:0;opacity:0;overflow:hidden;transition:max-height .6s var(--ease),opacity .5s}
+.forecast.on{max-height:200px;opacity:1}
+.forecast-cap{display:flex;justify-content:space-between;font-family:var(--util);font-size:.55rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px}
+#spark{width:100%;height:56px}
+
+/* alarm banner */
+.alarm{display:none;align-items:center;gap:14px;max-width:620px;margin:0 auto 22px;
+  background:#F6E2DC;border:1px solid #C08476;border-radius:8px;padding:14px 20px;color:#7A3324;
+  font-family:var(--util);font-size:.72rem;letter-spacing:.06em}
+.alarm.on{display:flex;animation:shake .5s}
+@keyframes shake{0%,100%{transform:translateX(0)}22%{transform:translateX(-7px)}44%{transform:translateX(6px)}70%{transform:translateX(-3px)}}
+
+.submit-row{text-align:center;margin-top:52px}
+.big{background:var(--cream);color:var(--forest);border:0;border-radius:50px;cursor:pointer;
+  font-family:var(--util);font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;
+  padding:21px 62px;box-shadow:0 20px 46px -22px rgba(20,30,16,.9);transition:.3s var(--ease)}
+.big:hover{transform:translateY(-3px);background:var(--blush)}
+.big:disabled{opacity:.6;cursor:progress;transform:none}
+
+/* ════════════════════════════════════════════════════════════
+   FLIPBOOK
+   ════════════════════════════════════════════════════════════ */
+.book-wrap{display:none}
+.book-wrap.on{display:block;animation:fadeUp .9s var(--ease) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+.stage{perspective:2600px;display:flex;justify-content:center;padding:10px 0}
+.board{position:relative;background:linear-gradient(150deg,#243B21,#16240F);padding:16px;
+  border-radius:6px 16px 16px 6px;box-shadow:0 46px 90px -34px rgba(0,0,0,.85), inset 0 0 0 1px rgba(200,220,180,.16)}
+.board::before{content:"";position:absolute;left:16px;top:16px;bottom:16px;width:9px;
+  background:linear-gradient(90deg,rgba(0,0,0,.42),transparent);z-index:40;pointer-events:none}
+.book{position:relative;width:min(980px,88vw);height:min(614px,55vw);transform-style:preserve-3d}
+@media(max-width:1040px){.book{height:calc(88vw*.63)}}
+
+.stack{position:absolute;top:0;bottom:0;left:50%;width:50%;background:var(--page);
+  border-radius:0 5px 5px 0;box-shadow:2px 0 0 rgba(180,170,140,.5),4px 0 0 rgba(180,170,140,.35),6px 0 0 rgba(180,170,140,.22)}
+.verso-base{position:absolute;top:0;bottom:0;left:0;width:50%;background:var(--page);border-radius:5px 0 0 5px;
+  box-shadow:-2px 0 0 rgba(180,170,140,.5),-4px 0 0 rgba(180,170,140,.35)}
+
+.leaf{position:absolute;top:0;left:50%;width:50%;height:100%;transform-origin:left center;
+  transform-style:preserve-3d;transition:transform 1.05s cubic-bezier(.55,.06,.28,1)}
+.leaf.flipped{transform:rotateY(-180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:var(--page);overflow:hidden;padding:40px 40px 34px;display:flex;flex-direction:column}
+.face.front{border-radius:0 5px 5px 0;box-shadow:inset 14px 0 26px -20px rgba(60,45,20,.75)}
+.face.back{transform:rotateY(180deg);border-radius:5px 0 0 5px;box-shadow:inset -14px 0 26px -20px rgba(60,45,20,.75)}
+.face::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(120,96,52,.22) 100%)}
+.face .foxing{position:absolute;inset:0;pointer-events:none;opacity:.3;
+  background:radial-gradient(6px 4px at 18% 22%,rgba(150,116,60,.5),transparent),
+             radial-gradient(9px 6px at 76% 68%,rgba(150,116,60,.42),transparent),
+             radial-gradient(5px 5px at 60% 14%,rgba(150,116,60,.4),transparent)}
+
+.pg{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;min-height:0;height:100%}
+.pg-head{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid rgba(60,72,44,.24);padding-bottom:8px;
+  font-family:var(--util);font-size:.53rem;letter-spacing:.24em;text-transform:uppercase;color:#6C7350}
+.pg-body{flex:1;min-height:0;padding-top:20px;overflow:hidden}
+.pg-foot{font-family:var(--util);font-size:.52rem;letter-spacing:.22em;color:#8A8763;text-align:center;padding-top:8px}
+.pg h4{font-family:var(--display);font-weight:400;font-size:2.1rem;margin:0 0 4px;line-height:1.05;color:#23301A}
+.pg h5{font-family:var(--util);font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 12px}
+.pg .tw{font-family:var(--type);font-size:.86rem;line-height:1.72;color:#33402A}
+.pg .sig{font-family:var(--script);font-size:1.9rem;color:#2B3A22;transform:rotate(-3deg)}
+.pg-center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%}
+
+.readout{list-style:none;margin:0;padding:0}
+.readout li{display:flex;align-items:baseline;gap:8px;padding:6px 0;font-family:var(--type);font-size:.82rem;color:#33402A}
+.readout li i{flex:1;border-bottom:1px dotted rgba(60,72,44,.5);transform:translateY(-3px)}
+.readout li b{font-weight:400;font-family:var(--display);font-size:1.15rem}
+
+.crop-big{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,4.4vw,3.6rem);line-height:1;margin:12px 0 2px;color:#22301A}
+.conf-ring{position:relative;width:132px;height:132px;margin:0 auto}
+.conf-ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:1.85rem;color:#22301A}
+
+.bands{margin-top:6px}
+.brow{display:grid;grid-template-columns:88px 1fr 66px;align-items:center;gap:10px;padding:6px 0;
+  border-bottom:1px solid rgba(60,72,44,.16)}
+.brow .bn{font-family:var(--util);font-size:.53rem;letter-spacing:.16em;text-transform:uppercase;color:#5C6844}
+.brow .bv{font-family:var(--util);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;text-align:right}
+.g-good{color:var(--moss)}.g-ok{color:var(--gold)}.g-bad{color:#A8452F}
+.btrack{position:relative;height:14px}
+.btrack .ln{position:absolute;top:6.5px;left:0;right:0;height:1px;background:rgba(60,72,44,.22)}
+.btrack .ideal{position:absolute;top:3px;height:8px;border-radius:4px;background:var(--fern);opacity:.34}
+.btrack .you{position:absolute;top:0;width:2px;height:14px;background:var(--moss)}
+.btrack .you.bad{background:#A8452F}
+
+.tl{list-style:none;margin:14px 0 0;padding:0}
+.tl li{position:relative;padding:0 0 20px 26px;border-left:1px solid rgba(60,72,44,.28)}
+.tl li:last-child{border-left-color:transparent;padding-bottom:0}
+.tl li::before{content:"";position:absolute;left:-5px;top:5px;width:9px;height:9px;border-radius:50%;
+  background:var(--page);border:1px solid var(--moss)}
+.tl li.fill::before{background:var(--moss)}
+.tl .k{font-family:var(--util);font-size:.53rem;letter-spacing:.24em;text-transform:uppercase;color:#6C7350}
+.tl .d{font-family:var(--display);font-size:1.5rem;line-height:1.15;color:#22301A}
+.tl .n{font-family:var(--type);font-size:.76rem;color:#4A5638;line-height:1.6}
+
+.controls{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:30px}
+.turn{width:52px;height:52px;border-radius:50%;border:1px solid rgba(248,242,228,.4);background:transparent;
+  color:var(--cream);cursor:pointer;font-size:1.1rem;line-height:1;transition:.26s var(--ease)}
+.turn:hover:not(:disabled){background:var(--cream);color:var(--forest)}
+.turn:disabled{opacity:.28;cursor:default}
+.folio{font-family:var(--util);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(248,242,228,.72);min-width:130px;text-align:center}
+
+/* mobile: unfold the book into a stack of pages */
+@media(max-width:880px){
+  .stage{perspective:none;padding:0}
+  .board{padding:10px;width:100%}
+  .book{width:100%;height:auto;transform-style:flat;display:flex;flex-direction:column;gap:10px}
+  .stack,.verso-base,.board::before{display:none}
+  .leaf{position:static;width:100%;height:auto;transform:none!important;transform-style:flat;
+    display:flex;flex-direction:column;gap:10px}
+  .face{position:static;transform:none!important;backface-visibility:visible;height:auto;min-height:0;
+    border-radius:5px;padding:28px 22px 22px}
+  .pg{height:auto}
+  .pg-body{overflow:visible}
+  .pg-center{height:auto;padding:26px 0}
+  .controls{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+
+/* footer */
+.foot{position:relative;background:var(--forest);color:rgba(248,242,228,.7);padding:76px 24px 40px;overflow:hidden}
+.foot .inner{display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:flex-end}
+.foot h4{font-family:var(--display);font-weight:300;font-size:2rem;color:var(--cream);margin:0}
+.foot .script{color:var(--blush);font-size:1.3rem}
+.foot small{font-family:var(--util);font-size:.55rem;letter-spacing:.2em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- ═══ SVG SYMBOL LIBRARY ═══ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="s-orchid" viewBox="-50 -50 100 100">
+    <g><path d="M0 0C-13 -9 -15 -30 0 -42C15 -30 13 -9 0 0Z"/>
+      <path d="M0 0C-13 -9 -15 -30 0 -42C15 -30 13 -9 0 0Z" transform="rotate(72)"/>
+      <path d="M0 0C-13 -9 -15 -30 0 -42C15 -30 13 -9 0 0Z" transform="rotate(144)"/>
+      <path d="M0 0C-13 -9 -15 -30 0 -42C15 -30 13 -9 0 0Z" transform="rotate(216)"/>
+      <path d="M0 0C-13 -9 -15 -30 0 -42C15 -30 13 -9 0 0Z" transform="rotate(288)"/></g>
+  </symbol>
+  <symbol id="s-butterfly" viewBox="-30 -24 60 48">
+    <path d="M0 0C-6 -20 -20 -24 -26 -14C-30 -6 -18 2 0 0Z"/>
+    <path d="M0 0C-6 16 -16 22 -23 14C-27 8 -12 2 0 0Z"/>
+    <path d="M0 0C6 -20 20 -24 26 -14C30 -6 18 2 0 0Z"/>
+    <path d="M0 0C6 16 16 22 23 14C27 8 12 2 0 0Z"/>
+    <ellipse cx="0" cy="-1" rx="1.7" ry="9"/>
+  </symbol>
+  <symbol id="s-bee" viewBox="-18 -14 36 28">
+    <ellipse cx="0" cy="0" rx="9" ry="6"/>
+    <path d="M-2-6v12M2-6v12" stroke="#F8F2E4" stroke-width="1.6" fill="none"/>
+    <ellipse cx="-3" cy="-8" rx="7" ry="4" opacity=".45" transform="rotate(-22 -3 -8)"/>
+    <ellipse cx="3" cy="-8" rx="7" ry="4" opacity=".45" transform="rotate(22 3 -8)"/>
+  </symbol>
+  <symbol id="s-grain" viewBox="0 0 60 84"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+    <path d="M30 82V26"/><path d="M30 34c0-9 5-16 14-18 1 10-5 17-14 18Z"/><path d="M30 48c0-9-5-16-14-18-1 10 5 17 14 18Z"/>
+    <path d="M30 20c0-9 5-16 14-18 1 10-5 17-14 18Z"/><path d="M30 34c0-9-5-16-14-18-1 10 5 17 14 18Z"/></g></symbol>
+  <symbol id="s-pod" viewBox="0 0 60 84"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+    <path d="M12 56c0-20 12-36 34-40 4 21-11 39-34 40Z"/><circle cx="24" cy="46" r="3"/><circle cx="33" cy="35" r="3"/><circle cx="19" cy="56" r="3"/>
+    <path d="M30 82V62"/><path d="M30 66c7-3 12-9 13-16"/></g></symbol>
+  <symbol id="s-fruit" viewBox="0 0 60 84"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+    <circle cx="30" cy="42" r="19"/><path d="M30 23V8"/><path d="M30 15c0-8 6-13 15-14 1 9-6 14-15 14Z"/><path d="M30 82V61"/></g></symbol>
+  <symbol id="s-fibre" viewBox="0 0 60 84"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+    <circle cx="30" cy="38" r="16"/><path d="M30 22c-7 6-11 10-11 16M30 22c7 6 11 10 11 16M14 38c6 6 10 9 16 9M30 47c6 0 10-3 16-9"/>
+    <path d="M30 82V56"/><path d="M22 68c-6-1-9-6-9-11M38 68c6-1 9-6 9-11"/></g></symbol>
+</defs></svg>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <div class="nav-links">
+    <a href="#garden">the garden</a><a href="#register">the register</a><a href="#book">your reading</a>
+  </div>
+  <div class="nav-brand"><b>The Sowing Register</b><span class="script">a garden almanac for your field</span></div>
+  <button class="pill" onclick="document.getElementById('register').scrollIntoView()">Read my field</button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <div class="hero-sky"></div><div class="hero-haze"></div>
+  <svg class="hero-far"  id="gFar"  viewBox="0 0 1400 300" preserveAspectRatio="xMidYMin slice"></svg>
+  <svg class="hero-near" id="gNear" viewBox="0 0 1400 420" preserveAspectRatio="xMidYMax slice"></svg>
+  <svg class="hero-side l" id="gLeft"  viewBox="0 0 320 1000" preserveAspectRatio="xMinYMid slice"></svg>
+  <svg class="hero-side r" id="gRight" viewBox="0 0 320 1000" preserveAspectRatio="xMinYMid slice"></svg>
+  <div class="petals" id="petals"></div>
+
+  <div class="arch">
+    <p class="eyebrow">Seven readings · one field · one season</p>
+    <h1><em>The Sowing</em>Register</h1>
+    <p class="flourish">what will this land give?</p>
+    <p class="lede">Tell the register what your soil holds and what the sky is bringing. It answers in a bound almanac — three crops, the reasons behind each, and the date your ground comes free again.</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#register">Begin the reading</a>
+      <a class="btn btn-line" href="#garden">Walk the garden</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PHILOSOPHY ═══ -->
+<section class="band band-cream" id="garden">
+  <svg class="watermark" id="wmL" style="left:-90px;top:40px;width:340px;height:600px" viewBox="0 0 340 600"></svg>
+  <svg class="watermark" id="wmR" style="right:-80px;bottom:20px;width:320px;height:560px" viewBox="0 0 320 560"></svg>
+  <div class="inner">
+    <div class="philo">
+      <div>
+        <p class="eyebrow" style="color:var(--gold)">Our philosophy</p>
+        <h3>Every field is a small<br>country with its own weather</h3>
+        <p>A recommendation that ignores your particular acre is just a rumour. The register reads nitrogen, phosphorus and potassium from your soil health card, takes the pH, then listens to fifteen days of sky above your village — and only then names a crop.</p>
+        <p style="margin-top:14px">No two readings come out alike, because no two fields are alike.</p>
+        <p class="quote">Sow by what the ground says,<br>not by what the market whispers.</p>
+      </div>
+      <div style="position:relative">
+        <div class="oval"><div class="oval-art"></div><svg id="ovalArt" viewBox="0 0 400 500" style="position:absolute;inset:0"></svg></div>
+        <div class="oval-frame"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FORM ═══ -->
+<section class="band band-olive" id="register">
+  <svg class="watermark" id="wmForm" style="left:50%;top:0;transform:translateX(-50%);width:1300px;height:520px;opacity:.14" viewBox="0 0 1300 520"></svg>
+  <div class="inner">
+    <div class="sec-head">
+      <p class="eyebrow">The register</p>
+      <h2>Seven readings</h2>
+      <p class="script">from the soil, and from the sky</p>
+      <p>Fill both cards. Nothing is stored — the reading is made in your browser and disappears when you close it.</p>
+    </div>
+
+    <div class="alarm" id="alarm"><span>✦</span><span id="alarmText"></span></div>
+
+    <form id="reg" novalidate>
+      <div class="cards">
+
+        <!-- SOIL -->
+        <div class="card">
+          <svg class="card-wm" id="wmSoil" width="240" height="240" viewBox="0 0 240 240"></svg>
+          <div class="card-head">
+            <p class="rn">CARD I</p>
+            <h3>The soil</h3>
+            <p class="script">what the ground already holds</p>
+          </div>
+          <div class="card-body">
+            <div class="triple">
+              <div class="field">
+                <div class="field-top"><label for="n">Nitrogen</label><span class="unit">kg/ha</span></div>
+                <input id="n" inputmode="decimal" placeholder="0" data-min="0" data-max="300" data-label="Nitrogen">
+                <div class="err">0–300</div>
+              </div>
+              <div class="field">
+                <div class="field-top"><label for="p">Phosphorus</label><span class="unit">kg/ha</span></div>
+                <input id="p" inputmode="decimal" placeholder="0" data-min="0" data-max="300" data-label="Phosphorus">
+                <div class="err">0–300</div>
+              </div>
+              <div class="field">
+                <div class="field-top"><label for="k">Potassium</label><span class="unit">kg/ha</span></div>
+                <input id="k" inputmode="decimal" placeholder="0" data-min="0" data-max="300" data-label="Potassium">
+                <div class="err">0–300</div>
+              </div>
+            </div>
+
+            <div style="margin-top:24px">
+              <div class="field">
+                <div class="field-top"><label for="ph">Soil pH</label><span class="unit">3 – 10</span></div>
+                <input id="ph" inputmode="decimal" placeholder="0.0" data-min="3" data-max="10" data-label="Soil pH">
+                <div class="err">3.0–10.0</div>
+              </div>
+              <div class="ph-scale">
+                <div class="ph-track"><div class="ph-mark" id="phMark"></div></div>
+                <div class="ph-legend"><span>Acid</span><span>Neutral</span><span>Alkaline</span></div>
+              </div>
+            </div>
+
+            <button type="button" class="ghost" id="scanBtn">Read from soil health card</button>
+            <input type="file" id="scanFile" accept="image/*,application/pdf" hidden>
+            <p class="note" id="scanNote"></p>
+          </div>
+        </div>
+
+        <!-- SKY -->
+        <div class="card">
+          <svg class="card-wm" id="wmSky" width="240" height="240" viewBox="0 0 240 240"></svg>
+          <div class="card-head">
+            <p class="rn">CARD II</p>
+            <h3>The sky</h3>
+            <p class="script">what the season is bringing</p>
+          </div>
+          <div class="card-body">
+            <div class="field">
+              <div class="field-top"><label for="loc">Village or district</label><span class="unit">location</span></div>
+              <input id="loc" placeholder="Ahilyanagar, Maharashtra">
+            </div>
+
+            <button type="button" class="ghost" id="fetchBtn">Fetch the forecast</button>
+            <p class="note" id="fcNote"></p>
+
+            <div class="triple" style="margin-top:20px">
+              <div class="field">
+                <div class="field-top"><label for="temp">Temp</label><span class="unit">°C</span></div>
+                <input id="temp" inputmode="decimal" placeholder="0" data-min="0" data-max="55" data-label="Temperature">
+                <div class="err">0–55</div>
+              </div>
+              <div class="field">
+                <div class="field-top"><label for="hum">Humidity</label><span class="unit">%</span></div>
+                <input id="hum" inputmode="decimal" placeholder="0" data-min="0" data-max="100" data-label="Humidity">
+                <div class="err">0–100</div>
+              </div>
+              <div class="field">
+                <div class="field-top"><label for="rain">Rainfall</label><span class="unit">mm</span></div>
+                <input id="rain" inputmode="decimal" placeholder="0" data-min="0" data-max="400" data-label="Rainfall">
+                <div class="err">0–400</div>
+              </div>
+            </div>
+
+            <div class="forecast" id="forecast">
+              <div class="forecast-cap"><span>Rain expected, next 15 days</span><span id="fcTotal"></span></div>
+              <svg id="spark" viewBox="0 0 300 56" preserveAspectRatio="none"></svg>
+            </div>
+
+            <div style="margin-top:22px">
+              <div class="field">
+                <div class="field-top"><label for="sow">Intended sowing date</label><span class="unit">for the calendar</span></div>
+                <input id="sow" type="date">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="big" id="submitBtn">Read the field</button>
+        <div style="margin-top:16px">
+          <button type="button" class="ghost" id="sampleBtn"
+            style="border-color:rgba(248,242,228,.45);color:var(--cream)">Fill with sample readings</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ═══ FLIPBOOK ═══ -->
+<section class="band band-forest" id="book">
+  <svg class="watermark" id="wmBookL" style="left:-60px;top:0;width:380px;height:900px;opacity:.4" viewBox="0 0 380 900"></svg>
+  <svg class="watermark" id="wmBookR" style="right:-60px;top:60px;width:380px;height:900px;opacity:.4;transform:scaleX(-1)" viewBox="0 0 380 900"></svg>
+  <div class="inner">
+    <div class="sec-head">
+      <p class="eyebrow">The answer</p>
+      <h2>Your reading</h2>
+      <p class="script">bound, dated and signed</p>
+      <p id="bookIntro">The almanac stays closed until the register has your seven readings.</p>
+    </div>
+
+    <div class="book-wrap" id="bookWrap">
+      <div class="stage">
+        <div class="board">
+          <div class="book" id="bookEl">
+            <div class="verso-base"></div>
+            <div class="stack"></div>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="turn" id="prevBtn" aria-label="Previous page">‹</button>
+        <span class="folio" id="folio">—</span>
+        <button class="turn" id="nextBtn" aria-label="Next page">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <svg class="watermark" id="wmFoot" style="left:0;right:0;bottom:-30px;width:100%;height:220px;opacity:.35" viewBox="0 0 1400 220" preserveAspectRatio="none"></svg>
+  <div class="inner">
+    <div><h4>The Sowing Register</h4><p class="script">grown from soil, sky and a little arithmetic</p></div>
+    <small>Advisory only · confirm with your local extension officer</small>
+  </div>
+</footer>
+
+<script>
+"use strict";
+/* ══════════════════════════════════════════════════════════════
+   BACKEND HOOKS — three functions to swap. Nothing else changes.
+     1  getRecommendation(inputs) → POST /api/recommend
+     2  fetchForecast(place)      → weather API
+     3  readSoilCard(file)        → OCR endpoint
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─── crop reference ─── */
+const CROPS=[
+ {name:"Rice",glyph:"grain",season:"Kharif",dur:120,fallow:21,ideal:{n:80,p:47,k:40,ph:6.4,temp:23.7,hum:82,rain:236},tol:{n:26,p:14,k:12,ph:.7,temp:3.4,hum:9,rain:70}},
+ {name:"Maize",glyph:"grain",season:"Kharif / Rabi",dur:100,fallow:21,ideal:{n:78,p:48,k:20,ph:6.2,temp:22.4,hum:65,rain:84},tol:{n:24,p:14,k:8,ph:.7,temp:3.6,hum:12,rain:30}},
+ {name:"Chickpea",glyph:"pod",season:"Rabi",dur:105,fallow:12,ideal:{n:40,p:68,k:80,ph:7.3,temp:18.9,hum:17,rain:80},tol:{n:16,p:16,k:16,ph:.7,temp:3.2,hum:8,rain:26}},
+ {name:"Pigeon pea",glyph:"pod",season:"Kharif",dur:160,fallow:12,ideal:{n:21,p:68,k:20,ph:5.8,temp:27.7,hum:48,rain:149},tol:{n:12,p:16,k:8,ph:.8,temp:4.4,hum:14,rain:48}},
+ {name:"Mung bean",glyph:"pod",season:"Kharif / Zaid",dur:65,fallow:10,ideal:{n:21,p:47,k:20,ph:6.7,temp:28.5,hum:85,rain:48},tol:{n:12,p:14,k:8,ph:.7,temp:3.4,hum:9,rain:20}},
+ {name:"Black gram",glyph:"pod",season:"Kharif",dur:80,fallow:10,ideal:{n:40,p:67,k:19,ph:7.1,temp:29.9,hum:65,rain:68},tol:{n:16,p:15,k:8,ph:.7,temp:3.6,hum:12,rain:24}},
+ {name:"Lentil",glyph:"pod",season:"Rabi",dur:110,fallow:12,ideal:{n:19,p:68,k:19,ph:6.9,temp:24.5,hum:65,rain:46},tol:{n:12,p:15,k:8,ph:.7,temp:3.6,hum:12,rain:20}},
+ {name:"Cotton",glyph:"fibre",season:"Kharif",dur:170,fallow:28,ideal:{n:117,p:46,k:20,ph:6.9,temp:24,hum:80,rain:80},tol:{n:28,p:14,k:8,ph:.8,temp:3.4,hum:9,rain:28}},
+ {name:"Jute",glyph:"fibre",season:"Kharif",dur:120,fallow:21,ideal:{n:78,p:47,k:40,ph:6.7,temp:25,hum:80,rain:175},tol:{n:24,p:14,k:12,ph:.7,temp:3.2,hum:9,rain:52}},
+ {name:"Groundnut",glyph:"pod",season:"Kharif",dur:115,fallow:14,ideal:{n:32,p:52,k:38,ph:6.5,temp:27,hum:60,rain:110},tol:{n:16,p:15,k:12,ph:.8,temp:4,hum:14,rain:36}},
+ {name:"Watermelon",glyph:"fruit",season:"Zaid",dur:85,fallow:14,ideal:{n:99,p:17,k:50,ph:6.5,temp:25.6,hum:85,rain:50},tol:{n:22,p:8,k:12,ph:.7,temp:3.2,hum:9,rain:20}},
+ {name:"Muskmelon",glyph:"fruit",season:"Zaid",dur:90,fallow:14,ideal:{n:100,p:18,k:50,ph:6.4,temp:28.8,hum:92,rain:24},tol:{n:22,p:8,k:12,ph:.7,temp:3.2,hum:7,rain:14}},
+ {name:"Grapes",glyph:"fruit",season:"Perennial",dur:150,fallow:0,ideal:{n:23,p:132,k:200,ph:6,temp:23.8,hum:82,rain:69},tol:{n:14,p:26,k:36,ph:.8,temp:4.2,hum:10,rain:26}},
+ {name:"Pomegranate",glyph:"fruit",season:"Perennial",dur:180,fallow:0,ideal:{n:19,p:18,k:40,ph:6.4,temp:21.8,hum:90,rain:107},tol:{n:12,p:9,k:12,ph:.8,temp:4,hum:8,rain:34}},
+ {name:"Banana",glyph:"fruit",season:"Perennial",dur:300,fallow:0,ideal:{n:100,p:82,k:50,ph:6,temp:27,hum:80,rain:105},tol:{n:24,p:18,k:14,ph:.8,temp:3.6,hum:9,rain:34}},
+ {name:"Papaya",glyph:"fruit",season:"Perennial",dur:270,fallow:0,ideal:{n:49,p:59,k:50,ph:6.7,temp:33.7,hum:92,rain:143},tol:{n:18,p:16,k:14,ph:.8,temp:4.4,hum:7,rain:44}},
+ {name:"Mango",glyph:"fruit",season:"Perennial",dur:365,fallow:0,ideal:{n:20,p:27,k:30,ph:5.7,temp:31.2,hum:50,rain:95},tol:{n:12,p:12,k:10,ph:.9,temp:4.6,hum:15,rain:32}},
+ {name:"Coffee",glyph:"fruit",season:"Perennial",dur:300,fallow:0,ideal:{n:101,p:28,k:30,ph:6.8,temp:25.5,hum:59,rain:158},tol:{n:24,p:11,k:10,ph:.8,temp:3.6,hum:13,rain:48}}
+];
+const FEATURES=[
+ {key:"n",label:"Nitrogen",unit:" kg/ha",w:1.1},
+ {key:"p",label:"Phosphorus",unit:" kg/ha",w:1.1},
+ {key:"k",label:"Potassium",unit:" kg/ha",w:1.1},
+ {key:"ph",label:"Soil pH",unit:"",w:1},
+ {key:"temp",label:"Temperature",unit:"°C",w:1.2},
+ {key:"hum",label:"Humidity",unit:"%",w:1},
+ {key:"rain",label:"Rainfall",unit:" mm",w:1.3}
+];
+
+/* ─── HOOK 1 ─── */
+function getRecommendation(inp){
+  return CROPS.map(function(c){
+    var num=0,den=0;
+    var factors=FEATURES.map(function(f){
+      var z=Math.abs(inp[f.key]-c.ideal[f.key])/c.tol[f.key];
+      var fit=Math.exp(-.5*z*z); num+=fit*f.w; den+=f.w;
+      return {key:f.key,label:f.label,unit:f.unit,z:z,you:inp[f.key],ideal:c.ideal[f.key],tol:c.tol[f.key],
+              verdict:z<.75?"well matched":z<1.6?"acceptable":"limiting"};
+    });
+    return {crop:c,score:num/den,factors:factors};
+  }).sort(function(a,b){return b.score-a.score}).slice(0,3);
+}
+/* ─── HOOK 2 ─── */
+function fetchForecast(place){
+  return new Promise(function(res){
+    var seed=0,i; for(i=0;i<(place||"field").length;i++) seed=(seed*31+place.charCodeAt(i))%9973;
+    function rnd(){ seed=(seed*1103515245+12345)%2147483648; return seed/2147483648; }
+    var days=[]; for(i=0;i<15;i++) days.push(+(rnd()*rnd()*34).toFixed(1));
+    var total=days.reduce(function(a,b){return a+b},0);
+    setTimeout(function(){ res({temp:+(21+rnd()*11).toFixed(1),hum:Math.round(46+rnd()*46),
+      rain:Math.round(total*(1.6+rnd())),days:days}); },900);
+  });
+}
+/* ─── HOOK 3 ─── */
+function readSoilCard(file){
+  return new Promise(function(res){ setTimeout(function(){ res({n:84,p:44,k:38,ph:6.6}); },1400); });
+}
+
+/* ══════════════ procedural botanicals ══════════════ */
+var NS="http://www.w3.org/2000/svg";
+function E(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e;}
+var GREENS=["#3F5730","#4E6B39","#5F7F46","#728F55","#87A167","#2E4424"];
+var BLOOMS=["#C9AAD0","#8E6C93","#D8ADA8","#E7CBC6","#EFE3C8","#C79E5A"];
+function pick(a,r){return a[Math.floor(r()*a.length)]}
+function rng(seed){return function(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648}}
+
+function leafD(len,wid){return "M0 0C"+wid+" "+(-len*.3)+","+(wid*.75)+" "+(-len*.72)+",0 "+(-len)+
+  "C"+(-wid*.75)+" "+(-len*.72)+","+(-wid)+" "+(-len*.3)+",0 0Z";}
+
+function fern(g,L,color,op,r){
+  var c1x=L*.16,c1y=-L*.5,ex=L*.06,ey=-L;
+  g.appendChild(E("path",{d:"M0 0Q"+c1x+" "+c1y+" "+ex+" "+ey,stroke:color,fill:"none","stroke-width":Math.max(1,L*.016),
+    "stroke-linecap":"round",opacity:op}));
+  var n=Math.round(9+r()*4),i;
+  for(i=1;i<=n;i++){
+    var t=i/(n+1), mt=1-t;
+    var x=2*mt*t*c1x+t*t*ex, y=2*mt*t*c1y+t*t*ey;
+    var s=L*.3*(1-t*.7);
+    [-1,1].forEach(function(d){
+      g.appendChild(E("path",{d:leafD(s,s*.3),fill:color,opacity:op,
+        transform:"translate("+x.toFixed(1)+" "+y.toFixed(1)+") rotate("+(d*(58+r()*16)).toFixed(0)+")"}));
+    });
+  }
+}
+function vine(g,L,color,op,r){
+  var d="M0 0C"+(L*.4)+" "+(-L*.18)+","+(L*.62)+" "+(L*.2)+","+L+" "+(L*.04);
+  g.appendChild(E("path",{d:d,stroke:color,fill:"none","stroke-width":Math.max(1,L*.012),
+    "stroke-linecap":"round",opacity:op}));
+  var n=Math.round(7+r()*5),i;
+  for(i=1;i<=n;i++){
+    var t=i/(n+1),mt=1-t;
+    var x=3*mt*mt*t*(L*.4)+3*mt*t*t*(L*.62)+t*t*t*L;
+    var y=3*mt*mt*t*(-L*.18)+3*mt*t*t*(L*.2)+t*t*t*(L*.04);
+    var s=L*.12*(.6+r()*.7);
+    g.appendChild(E("path",{d:leafD(s,s*.42),fill:color,opacity:op,
+      transform:"translate("+x.toFixed(1)+" "+y.toFixed(1)+") rotate("+((i%2?-1:1)*(40+r()*60)).toFixed(0)+")"}));
+  }
+}
+function bloom(g,R,petals,fill,heart,op){
+  var i;
+  for(i=0;i<petals;i++)
+    g.appendChild(E("path",{d:"M0 0C"+(-R*.44)+" "+(-R*.34)+","+(-R*.34)+" "+(-R*.88)+",0 "+(-R)+
+      "C"+(R*.34)+" "+(-R*.88)+","+(R*.44)+" "+(-R*.34)+",0 0Z",fill:fill,opacity:op,
+      transform:"rotate("+(i*360/petals)+")"}));
+  g.appendChild(E("circle",{r:R*.18,fill:heart,opacity:Math.min(1,op+.25)}));
+}
+function stalk(g,x,y,h,color,op,r,withBloom){
+  var wrap=E("g",{transform:"translate("+x+" "+y+")"});
+  g.appendChild(wrap);
+  wrap.appendChild(E("path",{d:"M0 0Q"+(r()*16-8)+" "+(-h*.55)+" "+(r()*20-10)+" "+(-h),
+    stroke:color,fill:"none","stroke-width":1.6,"stroke-linecap":"round",opacity:op}));
+  if(withBloom){
+    var bg=E("g",{transform:"translate("+(r()*20-10)+" "+(-h)+")"});
+    bloom(bg,10+r()*10,5+Math.round(r()*2),pick(BLOOMS,r),"#E8D6A2",op);
+    wrap.appendChild(bg);
+  }
+}
+
+/* garden compositions */
+function growBorder(svg,W,H,seed,opts){
+  opts=opts||{}; var r=rng(seed); svg.innerHTML="";
+  var base=opts.baseline===undefined?H:opts.baseline;
+  var dir=opts.up===false?-1:1;
+  var i,n=opts.count||26;
+  for(i=0;i<n;i++){
+    var x=(i/(n-1))*W+(r()*40-20);
+    var L=(opts.min||90)+r()*((opts.max||220)-(opts.min||90));
+    var g=E("g",{transform:"translate("+x.toFixed(0)+" "+base+") rotate("+((r()*30-15)).toFixed(0)+")"+(dir<0?" scale(1,-1)":"")});
+    svg.appendChild(g);
+    var col=pick(GREENS,r), op=(opts.op||.9)*(.55+r()*.45);
+    if(r()<.62) fern(g,L,col,op,r); else vine(g,L*.9,col,op,r);
+    if(r()<.4) stalk(g,r()*30-15,0,L*(.7+r()*.5),col,op,r,true);
+  }
+  if(opts.wings!==false){
+    for(i=0;i<(opts.wings||3);i++){
+      var wx=r()*W, wy=base-(60+r()*(H*.5));
+      var u=E("use",{href:"#s-"+(r()<.6?"butterfly":"bee"),x:-30,y:-24,width:60,height:48,
+        fill:pick(BLOOMS,r),opacity:.85,transform:"translate("+wx.toFixed(0)+" "+wy.toFixed(0)+") scale("+(.7+r()*.8).toFixed(2)+") rotate("+(r()*50-25).toFixed(0)+")"});
+      svg.appendChild(u);
+    }
+  }
+}
+function growColumn(svg,W,H,seed){
+  var r=rng(seed); svg.innerHTML=""; var i;
+  for(i=0;i<16;i++){
+    var y=(i/15)*H+(r()*50-25), x=-10+r()*W*.55;
+    var g=E("g",{transform:"translate("+x.toFixed(0)+" "+y.toFixed(0)+") rotate("+(r()*70-35).toFixed(0)+")"});
+    svg.appendChild(g);
+    vine(g,110+r()*150,pick(GREENS,r),.55+r()*.4,r);
+  }
+  for(i=0;i<9;i++){
+    var bx=r()*W*.7,by=r()*H,bg=E("g",{transform:"translate("+bx.toFixed(0)+" "+by.toFixed(0)+")"});
+    bloom(bg,12+r()*16,5+Math.round(r()*2),pick(BLOOMS,r),"#E8D6A2",.7+r()*.3);
+    svg.appendChild(bg);
+  }
+}
+function growLineArt(svg,W,H,seed,stroke){
+  var r=rng(seed); svg.innerHTML=""; var i;
+  for(i=0;i<9;i++){
+    var g=E("g",{transform:"translate("+(r()*W).toFixed(0)+" "+(r()*H).toFixed(0)+") rotate("+(r()*360).toFixed(0)+")",
+      fill:"none",stroke:stroke||"#6E8552","stroke-width":1.1});
+    var R=26+r()*30,k,pt=5+Math.round(r()*3);
+    for(k=0;k<pt;k++)
+      g.appendChild(E("path",{d:"M0 0C"+(-R*.44)+" "+(-R*.34)+","+(-R*.34)+" "+(-R*.88)+",0 "+(-R)+
+        "C"+(R*.34)+" "+(-R*.88)+","+(R*.44)+" "+(-R*.34)+",0 0Z",transform:"rotate("+(k*360/pt)+")"}));
+    g.appendChild(E("circle",{r:R*.16}));
+    svg.appendChild(g);
+  }
+  for(i=0;i<6;i++){
+    var vg=E("g",{transform:"translate("+(r()*W).toFixed(0)+" "+(r()*H).toFixed(0)+") rotate("+(r()*360).toFixed(0)+")",
+      fill:"none",stroke:stroke||"#6E8552","stroke-width":1.1,opacity:.8});
+    vine(vg,90+r()*90,"none",1,r);
+    vg.querySelectorAll("path").forEach(function(p){p.setAttribute("fill","none");p.setAttribute("stroke",stroke||"#6E8552")});
+    svg.appendChild(vg);
+  }
+}
+
+/* ══════════════ page dressing ══════════════ */
+function $(s){return document.querySelector(s)}
+function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
+
+growBorder($("#gFar"),1400,300,7,{baseline:300,count:20,min:120,max:280,op:.75,wings:0});
+growBorder($("#gNear"),1400,420,21,{baseline:420,count:32,min:150,max:400,op:1,wings:4});
+growColumn($("#gLeft"),320,1000,53);
+growColumn($("#gRight"),320,1000,88);
+growLineArt($("#wmL"),340,600,11,"#8FA173");
+growLineArt($("#wmR"),320,560,29,"#8FA173");
+growLineArt($("#wmForm"),1300,520,41,"#F8F2E4");
+growLineArt($("#wmSoil"),240,240,63,"#6E8552");
+growLineArt($("#wmSky"),240,240,77,"#6E8552");
+growColumn($("#wmBookL"),380,900,91);
+growColumn($("#wmBookR"),380,900,17);
+growBorder($("#wmFoot"),1400,220,35,{baseline:220,count:26,min:70,max:180,op:.8,wings:2});
+growColumn($("#ovalArt"),400,500,66);
+
+/* drifting petals */
+(function(){
+  var box=$("#petals"),r=rng(303),i;
+  for(i=0;i<16;i++){
+    var s=document.createElement("span"); s.className="petal";
+    var size=10+r()*16;
+    s.style.left=(r()*100)+"%";
+    s.style.width=size+"px"; s.style.height=size+"px";
+    s.style.animationDuration=(13+r()*16)+"s";
+    s.style.animationDelay=(-r()*26)+"s";
+    s.innerHTML='<svg viewBox="-50 -50 100 100" width="'+size+'" height="'+size+'"><use href="#s-orchid" fill="'+
+      BLOOMS[Math.floor(r()*BLOOMS.length)]+'" opacity=".85"/></svg>';
+    box.appendChild(s);
+  }
+})();
+
+/* nav hide on scroll down */
+(function(){var last=0,nav=$("#nav");
+  addEventListener("scroll",function(){var y=scrollY;
+    nav.classList.toggle("up", y>last && y>260); last=y;},{passive:true});
+})();
+
+/* ══════════════ form ══════════════ */
+var REQ=["n","p","k","ph","temp","hum","rain"];
+function fieldOf(id){return document.getElementById(id).closest(".field")}
+function numOf(id){return parseFloat(document.getElementById(id).value)}
+function okOne(id){
+  var el=document.getElementById(id),v=parseFloat(el.value);
+  return !isNaN(v)&&v>=parseFloat(el.dataset.min)&&v<=parseFloat(el.dataset.max);
+}
+REQ.forEach(function(id){
+  document.getElementById(id).addEventListener("input",function(){
+    fieldOf(id).classList.remove("bad"); $("#alarm").classList.remove("on");
+  });
+});
+
+$("#sow").value=new Date().toISOString().slice(0,10);
+$("#ph").addEventListener("input",function(e){
+  var v=parseFloat(e.target.value);
+  if(!isNaN(v)) $("#phMark").style.left=Math.max(0,Math.min(100,((v-3)/7)*100))+"%";
+});
+
+$("#sampleBtn").addEventListener("click",function(){
+  var s={n:90,p:42,k:43,ph:6.5,temp:24.2,hum:81,rain:210};
+  REQ.forEach(function(k){document.getElementById(k).value=s[k];fieldOf(k).classList.remove("bad")});
+  if(!$("#loc").value) $("#loc").value="Ahilyanagar, Maharashtra";
+  $("#ph").dispatchEvent(new Event("input"));
+  $("#alarm").classList.remove("on");
+});
+
+$("#scanBtn").addEventListener("click",function(){$("#scanFile").click()});
+$("#scanFile").addEventListener("change",function(e){
+  if(!e.target.files.length) return;
+  var b=$("#scanBtn"); b.disabled=true; $("#scanNote").textContent="Reading the card…";
+  readSoilCard(e.target.files[0]).then(function(r){
+    ["n","p","k","ph"].forEach(function(k){document.getElementById(k).value=r[k];fieldOf(k).classList.remove("bad")});
+    $("#ph").dispatchEvent(new Event("input"));
+    b.disabled=false; $("#scanNote").textContent="Four values filled — check them against the printed card.";
+  });
+});
+
+$("#fetchBtn").addEventListener("click",function(){
+  var b=$("#fetchBtn"); b.disabled=true; $("#fcNote").textContent="Reading the sky…";
+  fetchForecast($("#loc").value.trim()||"Ahilyanagar").then(function(w){
+    $("#temp").value=w.temp; $("#hum").value=w.hum; $("#rain").value=w.rain;
+    ["temp","hum","rain"].forEach(function(k){fieldOf(k).classList.remove("bad")});
+    drawSpark(w.days);
+    $("#fcTotal").textContent=w.rain+" mm this season";
+    $("#forecast").classList.add("on");
+    b.disabled=false; $("#fcNote").textContent="Forecast loaded — adjust any figure by hand.";
+  });
+});
+function drawSpark(days){
+  var W=300,H=56,gap=3,bw=(W-gap*(days.length-1))/days.length;
+  var max=Math.max.apply(null,days.concat([10])),out="",i;
+  for(i=0;i<days.length;i++){
+    var h=Math.max(1.5,(days[i]/max)*(H-8)),x=i*(bw+gap);
+    out+='<rect x="'+x.toFixed(1)+'" y="'+(H-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+
+         '" rx="1.5" fill="#4E6B39" opacity="'+(days[i]>.5?.85:.22)+'"/>';
+  }
+  $("#spark").innerHTML=out+'<line x1="0" y1="55" x2="300" y2="55" stroke="#4E6B39" stroke-opacity=".3"/>';
+}
+
+/* ══════════════ submit — loud failure ══════════════ */
+$("#reg").addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var missing=[];
+  REQ.forEach(function(id){
+    if(!okOne(id)){ fieldOf(id).classList.add("bad"); missing.push(document.getElementById(id).dataset.label); }
+  });
+  if(missing.length){
+    $("#alarmText").textContent = missing.length===1
+      ? missing[0]+" is still missing — the register needs all seven readings."
+      : missing.length+" readings still missing: "+missing.join(", ")+".";
+    var al=$("#alarm"); al.classList.remove("on"); void al.offsetWidth; al.classList.add("on");
+    al.scrollIntoView({behavior:"smooth",block:"center"});
+    setTimeout(function(){ document.getElementById(REQ.filter(function(i){return !okOne(i)})[0]).focus({preventScroll:true}); },420);
+    return;
+  }
+  var btn=$("#submitBtn"); btn.disabled=true; btn.textContent="Binding the almanac…";
+  var inputs={}; REQ.forEach(function(k){inputs[k]=numOf(k)});
+  setTimeout(function(){                       // remove when the API is live
+    buildBook(getRecommendation(inputs),inputs);
+    btn.disabled=false; btn.textContent="Read the field again";
+    $("#bookIntro").textContent="Turn the pages — or use the arrows below.";
+    $("#bookWrap").classList.add("on");
+    $("#book").scrollIntoView({behavior:"smooth",block:"start"});
+  },700);
+});
+
+/* ══════════════ the almanac ══════════════ */
+var DF={day:"numeric",month:"long",year:"numeric"};
+function addDays(d,n){var x=new Date(d.getTime());x.setDate(x.getDate()+n);return x}
+function fdate(d){return d.toLocaleDateString("en-GB",DF)}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+
+function ring(pct){
+  var R=58,C=2*Math.PI*R;
+  return '<div class="conf-ring"><svg viewBox="0 0 132 132" width="132" height="132">'+
+    '<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="#C6C3A4" stroke-width="3"/>'+
+    '<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="#4E6B39" stroke-width="3" stroke-linecap="round" '+
+    'stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-pct/100)).toFixed(1)+'" transform="rotate(-90 66 66)"/>'+
+    '</svg><b>'+pct+'%</b></div>';
+}
+function glyph(name,size){
+  return '<svg viewBox="0 0 60 84" width="'+size+'" height="'+(size*1.4)+'" style="color:#4E6B39;margin:0 auto">'+
+         '<use href="#s-'+name+'"/></svg>';
+}
+function bandRows(f){
+  return FEATURES.map(function(F){
+    var x=null,i;
+    for(i=0;i<f.length;i++) if(f[i].key===F.key) x=f[i];
+    var lo=x.ideal-2.6*x.tol,hi=x.ideal+2.6*x.tol,span=hi-lo;
+    var bl=((x.ideal-x.tol-lo)/span)*100, bw=(2*x.tol/span)*100;
+    var you=Math.max(1,Math.min(99,((x.you-lo)/span)*100));
+    var cls=x.z<.75?"g-good":x.z<1.6?"g-ok":"g-bad";
+    return '<div class="brow"><div class="bn">'+F.label+'</div>'+
+      '<div class="btrack"><div class="ln"></div><div class="ideal" style="left:'+bl.toFixed(1)+'%;width:'+bw.toFixed(1)+'%"></div>'+
+      '<div class="you'+(x.z>=1.6?" bad":"")+'" style="left:'+you.toFixed(1)+'%"></div></div>'+
+      '<div class="bv '+cls+'">'+x.verdict+'</div></div>';
+  }).join("");
+}
+function explain(r){
+  var s=r.factors.slice().sort(function(a,b){return a.z-b.z});
+  var w=s[s.length-1];
+  var head=s[0].label.toLowerCase()+" and "+s[1].label.toLowerCase()+
+    " sit close to the band "+r.crop.name.toLowerCase()+" does best in";
+  head=head.charAt(0).toUpperCase()+head.slice(1);
+  if(w.z<.75) return head+", and nothing among the seven readings works against it.";
+  return head+". "+w.label+" is the weak point — "+(w.z<1.6?"a little ":"well ")+
+    (w.you>w.ideal?"higher":"lower")+" than ideal at "+w.you+w.unit+
+    " against a preferred "+w.ideal+w.unit+".";
+}
+function pageShell(head,folio,inner){
+  return '<div class="foxing"></div><div class="pg"><div class="pg-head"><span>'+head[0]+'</span><span>'+head[1]+'</span></div>'+
+         '<div class="pg-body">'+inner+'</div><div class="pg-foot">'+folio+'</div></div>';
+}
+
+function buildBook(results,inputs){
+  var top=results[0], sow=new Date($("#sow").value||Date.now());
+  var harv=addDays(sow,top.crop.dur), next=addDays(harv,top.crop.fallow);
+  var place=$("#loc").value.trim()||"your field";
+  var today=fdate(new Date());
+  var pages=[];
+
+  /* 1 — title */
+  pages.push(pageShell(["The Sowing Register",""],"", 
+    '<div class="pg-center">'+
+    '<svg viewBox="-50 -50 100 100" width="76" height="76"><use href="#s-orchid" fill="#7E5B84" opacity=".9"/></svg>'+
+    '<h5 style="margin-top:18px">Reading no. '+(1000+Math.floor(Math.random()*8999))+'</h5>'+
+    '<h4 style="font-size:2.7rem">The Reading</h4>'+
+    '<p class="script" style="font-size:1.5rem;color:#6E8552">for '+esc(place)+'</p>'+
+    '<p class="tw" style="margin-top:22px">Taken '+today+'</p>'+
+    '<p class="tw" style="opacity:.7;margin-top:26px">turn the page →</p></div>'));
+
+  /* 2 — the field as measured */
+  pages.push(pageShell(["I","The field, as measured"],"two",
+    '<h4>What you gave us</h4><h5>Seven readings</h5>'+
+    '<ul class="readout">'+FEATURES.map(function(F){
+      return '<li><span>'+F.label+'</span><i></i><b>'+inputs[F.key]+F.unit+'</b></li>';
+    }).join("")+'</ul>'+
+    '<p class="tw" style="margin-top:18px">Every crop below is judged against these seven figures and nothing else.</p>'));
+
+  /* 3 — first recommendation */
+  pages.push(pageShell(["II","First recommendation"],"three",
+    '<div class="pg-center">'+glyph(top.crop.glyph,64)+
+    '<h5 style="margin-top:14px">Sow this</h5>'+
+    '<div class="crop-big">'+top.crop.name+'</div>'+
+    '<p class="tw" style="opacity:.8">'+top.crop.season+' · '+top.crop.dur+' days to harvest</p>'+
+    '<div style="margin-top:18px">'+ring(Math.round(top.score*100))+'</div>'+
+    '<h5 style="margin-top:10px">Confidence</h5></div>'));
+
+  /* 4 — why */
+  pages.push(pageShell(["III","Why it fits"],"four",
+    '<h4>Why '+top.crop.name.toLowerCase()+'</h4><h5>Contributing factors</h5>'+
+    '<p class="tw" style="margin-bottom:14px">'+explain(top)+'</p>'+
+    '<div class="bands">'+bandRows(top.factors)+'</div>'+
+    '<p class="tw" style="font-size:.72rem;opacity:.72;margin-top:10px">The shaded band is where this crop prefers to sit. The mark is your field.</p>'));
+
+  /* 5 & 6 — runners up */
+  [1,2].forEach(function(i){
+    var r=results[i];
+    pages.push(pageShell([["IV","V"][i-1],(i===1?"Second":"Third")+" recommendation"],(i===1?"five":"six"),
+      '<div style="display:flex;align-items:center;gap:16px">'+glyph(r.crop.glyph,44)+
+      '<div><h5 style="margin:0">'+(i===1?"Second":"Third")+" choice"+'</h5>'+
+      '<div class="crop-big" style="font-size:2.4rem">'+r.crop.name+'</div></div></div>'+
+      '<p class="tw" style="opacity:.8;margin-top:4px">'+r.crop.season+' · '+r.crop.dur+' days · '+Math.round(r.score*100)+'% confidence</p>'+
+      '<p class="tw" style="margin:14px 0">'+explain(r)+'</p>'+
+      '<div class="bands">'+bandRows(r.factors)+'</div>'));
+  });
+
+  /* 7 — calendar */
+  pages.push(pageShell(["VI","The calendar"],"seven",
+    '<h4>When the ground is free</h4><h5>If you sow '+top.crop.name.toLowerCase()+'</h5>'+
+    '<ul class="tl">'+
+    '<li class="fill"><div class="k">Sow</div><div class="d">'+fdate(sow)+'</div><div class="n">The field is committed from this date.</div></li>'+
+    '<li><div class="k">Harvest</div><div class="d">'+fdate(harv)+'</div><div class="n">'+top.crop.dur+' days in the ground.</div></li>'+
+    (top.crop.fallow===0
+      ? '<li><div class="k">Next sowing</div><div class="d">Not this year</div><div class="n">A perennial — the field stays under this crop for several cycles.</div></li>'
+      : '<li><div class="k">Next sowing</div><div class="d">'+fdate(next)+'</div><div class="n">'+top.crop.fallow+' days of rest and land preparation after harvest.</div></li>')+
+    '</ul>'));
+
+  /* 8 — after */
+  pages.push(pageShell(["VII","After this crop"],"eight",
+    '<h4>What follows</h4><h5>Rotation</h5>'+
+    '<p class="tw">'+(top.crop.fallow===0
+      ? esc(top.crop.name)+' holds the land well beyond a single season. Plan any second crop on a different plot, or intercrop in the early years while the canopy is still open.'
+      : (top.crop.glyph==="pod"
+        ? 'This is a legume, so it leaves nitrogen behind in the soil. A cereal — maize or rice — will take that up well next season.'
+        : 'This crop draws heavily on the soil. Following it with a legume such as chickpea or mung bean will help put nitrogen back before the next heavy feeder.'))+'</p>'+
+    '<p class="tw" style="margin-top:14px">Whatever you choose, take a fresh soil test before the next sowing. One season changes the numbers on this page more than most people expect.</p>'));
+
+  /* 9 — closing */
+  pages.push(pageShell(["","In closing"],"nine",
+    '<div class="pg-center">'+
+    '<p class="tw" style="max-width:30ch">This reading is advice, not instruction. Your own eyes on your own land still know things the seven numbers do not.</p>'+
+    '<p class="sig" style="margin-top:34px">The Sowing Register</p>'+
+    '<p class="tw" style="font-size:.7rem;opacity:.7;margin-top:8px">'+today+'</p></div>'));
+
+  /* 10 — inside back cover */
+  pages.push('<div class="foxing"></div><div class="pg"><div class="pg-center" style="opacity:.35">'+
+    '<svg viewBox="-50 -50 100 100" width="120" height="120"><use href="#s-orchid" fill="#6E8552"/></svg></div></div>');
+
+  renderLeaves(pages);
+}
+
+/* ─── leaf plumbing ─── */
+var LEAVES=[],CUR=0;
+function renderLeaves(pages){
+  var book=$("#bookEl");
+  $$(".leaf").forEach(function(l){l.remove()});
+  LEAVES=[]; CUR=0;
+  var n=Math.ceil(pages.length/2),i;
+  for(i=0;i<n;i++){
+    var leaf=document.createElement("div"); leaf.className="leaf";
+    var f=document.createElement("div"); f.className="face front"; f.innerHTML=pages[i*2]||"";
+    var b=document.createElement("div"); b.className="face back";  b.innerHTML=pages[i*2+1]||"";
+    leaf.appendChild(f); leaf.appendChild(b);
+    book.appendChild(leaf); LEAVES.push(leaf);
+  }
+  layer(); folio();
+}
+function layer(){
+  var N=LEAVES.length;
+  LEAVES.forEach(function(l,i){
+    l.style.zIndex = i<CUR ? (i+1) : (2*N-i);
+  });
+}
+function flipTo(k){
+  k=Math.max(0,Math.min(LEAVES.length,k));
+  if(k===CUR) return;
+  var moving=LEAVES[k>CUR?CUR:k];
+  moving.style.zIndex=2*LEAVES.length+5;
+  CUR=k;
+  LEAVES.forEach(function(l,i){ l.classList.toggle("flipped", i<CUR); });
+  setTimeout(layer,1060);
+  folio();
+}
+function folio(){
+  var N=LEAVES.length;
+  $("#folio").textContent = CUR===0 ? "Cover · 1 of "+(N*2) : "Pages "+(CUR*2)+"–"+(CUR*2+1);
+  $("#prevBtn").disabled = CUR===0;
+  $("#nextBtn").disabled = CUR>=N;
+}
+$("#nextBtn").addEventListener("click",function(){flipTo(CUR+1)});
+$("#prevBtn").addEventListener("click",function(){flipTo(CUR-1)});
+addEventListener("keydown",function(e){
+  if(!$("#bookWrap").classList.contains("on")) return;
+  if(e.key==="ArrowRight") flipTo(CUR+1);
+  if(e.key==="ArrowLeft")  flipTo(CUR-1);
+});
+</script>
+</body>
+</html>

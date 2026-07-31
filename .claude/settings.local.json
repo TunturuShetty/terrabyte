@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk 'NR<=260 && /style=\"/' index.html)",
+      "Bash",
+      "PowerShell"
+    ]
+  }
+}
