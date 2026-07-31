@@ -82,6 +82,16 @@ body::after {
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
 }
+/* mobile performance: drop the blend-mode grain and decorative
+   watermarks on small screens — they cost scroll fps on budget phones */
+@media (max-width: 900px) {
+  body::after {
+    display: none;
+  }
+  .watermark {
+    display: none;
+  }
+}
 
 /* ════════════════════════════════════════════════════════════
    NAV
@@ -159,12 +169,24 @@ body::after {
   color: var(--cream);
 }
 @media (max-width: 900px) {
-  .nav-links,
-  .nav .pill {
+  .nav-links {
     display: none;
   }
   .nav {
-    justify-content: center;
+    padding: 12px 18px;
+  }
+  .nav-brand {
+    text-align: left;
+  }
+  .nav-brand b {
+    font-size: 0.95rem;
+  }
+  .nav-brand span {
+    display: none;
+  }
+  .nav .pill {
+    flex-shrink: 0;
+    padding: 10px 18px;
   }
 }
 
@@ -185,6 +207,12 @@ body::after {
   inset: 0;
   z-index: -4;
   background: #43533a url("assets/hero-field.jpg") center / cover no-repeat;
+}
+/* phones get the 900px / 50 KB variant */
+@media (max-width: 640px) {
+  .hero-sky {
+    background-image: url("assets/hero-field-m.jpg");
+  }
 }
 /* vintage grade over the photograph */
 .hero-haze {
@@ -707,6 +735,13 @@ body::after {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+}
+/* narrow phones: stack the triple as a ruled list */
+@media (max-width: 640px) {
+  .triple {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
 }
 .sky-vals {
   margin-top: 20px;
