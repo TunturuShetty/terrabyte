@@ -1337,6 +1337,63 @@ body::after {
   text-align: center;
 }
 
+/* tap / swipe affordance in book mode — non-selectable so mouse
+   swipes don't turn into text selections */
+@media (min-width: 881px) {
+  .book {
+    cursor: pointer;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* ── reveal-on-view: pages wake as they come into sight ──
+   The .lit class is added by JS (on page turn, or IntersectionObserver
+   on mobile). All hidden pre-states live inside the no-preference query
+   so reduced-motion users always see finished pages. */
+.ring-arc {
+  stroke-dashoffset: var(--arc);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ring-arc {
+    transition: stroke-dashoffset 1.2s var(--ease) 0.2s;
+  }
+  .face:not(.lit) .ring-arc {
+    stroke-dashoffset: 364.5; /* full circumference = empty ring */
+  }
+  .brow,
+  .readout li,
+  .tl li {
+    transition:
+      opacity 0.55s var(--ease),
+      transform 0.55s var(--ease);
+  }
+  .face:not(.lit) .brow,
+  .face:not(.lit) .readout li,
+  .face:not(.lit) .tl li {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  /* your-field markers slide in after their rows settle */
+  .btrack .you {
+    transition:
+      transform 0.6s var(--ease) 0.4s,
+      opacity 0.6s var(--ease) 0.4s;
+  }
+  .face:not(.lit) .btrack .you {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+  /* stagger rows top to bottom */
+  .brow:nth-child(2), .readout li:nth-child(2), .tl li:nth-child(2) { transition-delay: 0.07s; }
+  .brow:nth-child(3), .readout li:nth-child(3), .tl li:nth-child(3) { transition-delay: 0.14s; }
+  .brow:nth-child(4), .readout li:nth-child(4) { transition-delay: 0.21s; }
+  .brow:nth-child(5), .readout li:nth-child(5) { transition-delay: 0.28s; }
+  .brow:nth-child(6), .readout li:nth-child(6) { transition-delay: 0.35s; }
+  .brow:nth-child(7), .readout li:nth-child(7) { transition-delay: 0.42s; }
+}
+
 /* mobile: unfold the book into a stack of pages */
 @media (max-width: 880px) {
   .stage {

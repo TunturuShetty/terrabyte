@@ -572,7 +572,7 @@ $("#reg").addEventListener("submit",function(ev){
   setTimeout(function(){                       // remove when the API is live
     buildBook(getRecommendation(inputs),inputs);
     btn.disabled=false; btn.textContent="Read the field again";
-    $("#bookIntro").textContent="Turn the pages — or use the arrows below.";
+    $("#bookIntro").textContent="Tap or swipe the book to turn the pages — or use the arrows below.";
     $("#bookWrap").classList.add("on");
     $("#book").scrollIntoView({behavior:"smooth",block:"start"});
   },700);
@@ -585,11 +585,11 @@ function fdate(d){return d.toLocaleDateString("en-GB",DF)}
 function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 
 function ring(pct){
-  var R=58,C=2*Math.PI*R;
+  var R=58,C=2*Math.PI*R;   // C ≈ 364.4 — keep in sync with .ring-arc CSS
   return '<div class="conf-ring"><svg viewBox="0 0 132 132" width="132" height="132">'+
     '<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="#C6C3A4" stroke-width="3"/>'+
-    '<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="#4E6B39" stroke-width="3" stroke-linecap="round" '+
-    'stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-pct/100)).toFixed(1)+'" transform="rotate(-90 66 66)"/>'+
+    '<circle class="ring-arc" cx="66" cy="66" r="'+R+'" fill="none" stroke="#4E6B39" stroke-width="3" stroke-linecap="round" '+
+    'stroke-dasharray="'+C.toFixed(1)+'" style="--arc:'+(C*(1-pct/100)).toFixed(1)+'" transform="rotate(-90 66 66)"/>'+
     '</svg><b>'+pct+'%</b></div>';
 }
 function glyph(name,size){
@@ -728,7 +728,23 @@ function renderLeaves(pages){
     leaf.appendChild(f); leaf.appendChild(b);
     book.appendChild(leaf); LEAVES.push(leaf);
   }
-  layer(); folio();
+  layer(); folio(); revealInit();
+}
+
+/* ─── reveal-on-view ─── */
+function lit(el){ if(el) el.classList.add("lit"); }
+function revealSpread(){
+  if(CUR>0) lit(LEAVES[CUR-1].querySelector(".face.back"));
+  if(CUR<LEAVES.length) lit(LEAVES[CUR].querySelector(".face.front"));
+}
+function revealInit(){
+  if(matchMedia("(max-width:880px)").matches && "IntersectionObserver" in window){
+    /* mobile: pages are an unrolled stack — light each as it scrolls into view */
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ lit(en.target); io.unobserve(en.target); } });
+    },{threshold:.2});
+    $$(".face").forEach(function(f){ io.observe(f); });
+  } else revealSpread();
 }
 function layer(){
   var N=LEAVES.length;
@@ -744,6 +760,7 @@ function flipTo(k){
   CUR=k;
   LEAVES.forEach(function(l,i){ l.classList.toggle("flipped", i<CUR); });
   setTimeout(layer,1060);
+  setTimeout(revealSpread,430);   // wake the new spread mid-turn
   folio();
 }
 function folio(){
@@ -759,6 +776,23 @@ addEventListener("keydown",function(e){
   if(e.key==="ArrowRight") flipTo(CUR+1);
   if(e.key==="ArrowLeft")  flipTo(CUR-1);
 });
+
+/* swipe or tap the book itself (desktop / tablet book mode only —
+   on phones the book unrolls into a scrolling stack) */
+(function(){
+  var el=$("#bookEl"),sx=0,sy=0,st=0;
+  function bookMode(){ return matchMedia("(min-width:881px)").matches; }
+  el.addEventListener("pointerdown",function(e){ sx=e.clientX; sy=e.clientY; st=Date.now(); });
+  el.addEventListener("pointerup",function(e){
+    if(!bookMode()||e.button>0) return;
+    var dx=e.clientX-sx,dy=e.clientY-sy;
+    if(Math.abs(dx)>44&&Math.abs(dx)>Math.abs(dy)){ flipTo(CUR+(dx<0?1:-1)); return; }  // swipe
+    if(Math.abs(dx)<8&&Math.abs(dy)<8&&Date.now()-st<500){                              // tap
+      var r=el.getBoundingClientRect();
+      flipTo(CUR+(e.clientX>r.left+r.width/2?1:-1));
+    }
+  });
+})();
 </script>
 </body>
 </html>
