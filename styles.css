@@ -162,9 +162,9 @@ body::after {
   left: 0;
   right: 0;
   z-index: 500;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
   padding: 13px 26px;
   background: rgba(248, 242, 228, 0.86);
@@ -181,6 +181,7 @@ body::after {
 }
 .nav-links {
   display: flex;
+  justify-self: start;
   gap: 26px;
   font-family: var(--util);
   font-size: 0.6rem;
@@ -210,6 +211,9 @@ body::after {
   font-family: var(--script);
   font-size: 0.9rem;
   color: var(--fern);
+}
+.nav .pill {
+  justify-self: end;
 }
 .pill {
   background: var(--blush);
@@ -603,10 +607,6 @@ body::after {
 .oval-wrap {
   position: relative;
 }
-#ovalArt {
-  position: absolute;
-  inset: 0;
-}
 .oval {
   position: relative;
   aspect-ratio: 4/5;
@@ -618,13 +618,7 @@ body::after {
 .oval-art {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    90% 60% at 50% 8%,
-    #f6ecca,
-    #ddc98a 40%,
-    #a89454 72%,
-    #5c4a26 100%
-  );
+  background: url("assets/page2_willow_oval.jpeg") center / cover no-repeat;
 }
 .oval-frame {
   position: absolute;
