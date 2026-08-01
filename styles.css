@@ -2,18 +2,19 @@
    TOKENS
    ════════════════════════════════════════════════════════════ */
 :root {
-  --cream: #f8f2e4;
-  --parchment: #efe4cb;
-  --page: #f4ebd6;
-  --fern: #6e8552;
-  --moss: #4a5c36;
-  --forest: #1e2f19;
-  --orchid: #7e5b84;
-  --orchid-lt: #c9aad0;
-  --blush: #d3a29d;
-  --gold: #b08a46;
-  --ink: #26301f;
-  --ink-soft: #55603f;
+  /* golden-hour palette — warm honey/amber, brighter than the old forest greens */
+  --cream: #fbf6e7;
+  --parchment: #f3e7c9;
+  --page: #f8efd8;
+  --fern: #8b9450;
+  --moss: #6b7038;
+  --forest: #3a2f16;
+  --orchid: #b26e4b;
+  --orchid-lt: #e4b98f;
+  --blush: #e8b48c;
+  --gold: #c9973f;
+  --ink: #3a3220;
+  --ink-soft: #6e5f3c;
 
   --display: "Cormorant Garamond", Georgia, serif;
   --body: "EB Garamond", Georgia, serif;
@@ -206,15 +207,9 @@ body::after {
   position: absolute;
   inset: 0;
   z-index: -4;
-  background: #43533a url("assets/hero-field.jpg") center / cover no-repeat;
+  background: #7a6a3e url("assets/hero-lake.jpg") center / cover no-repeat;
 }
-/* phones get the 900px / 50 KB variant */
-@media (max-width: 640px) {
-  .hero-sky {
-    background-image: url("assets/hero-field-m.jpg");
-  }
-}
-/* vintage grade over the photograph */
+/* golden-hour grade over the photograph */
 .hero-haze {
   position: absolute;
   inset: 0;
@@ -222,15 +217,15 @@ body::after {
   background:
     linear-gradient(
       180deg,
-      rgba(30, 47, 25, 0.42),
-      rgba(38, 48, 31, 0.18) 42%,
-      rgba(24, 36, 21, 0.6) 100%
+      rgba(58, 47, 22, 0.3),
+      rgba(58, 47, 22, 0.08) 42%,
+      rgba(42, 31, 12, 0.48) 100%
     ),
     radial-gradient(
       120% 90% at 50% 42%,
-      rgba(176, 138, 70, 0.1) 0%,
+      rgba(255, 214, 140, 0.14) 0%,
       transparent 45%,
-      rgba(20, 28, 14, 0.55) 100%
+      rgba(46, 34, 14, 0.5) 100%
     );
 }
 /* procedural garden layers retired — the photograph carries the hero now.
@@ -291,7 +286,7 @@ body::after {
   inset: 0;
   border: 1px solid rgba(248, 242, 228, 0.55);
   border-radius: 50% 50% 6px 6px / 30% 30% 3px 3px;
-  background: rgba(31, 48, 25, 0.24);
+  background: rgba(58, 42, 18, 0.28);
   backdrop-filter: blur(3px);
   z-index: -1;
 }
@@ -417,10 +412,10 @@ body::after {
   background: var(--cream);
 }
 .band-olive {
-  background: linear-gradient(180deg, #7c8c5c, #6b7c4e);
+  background: linear-gradient(180deg, #a08f52, #8a7a40);
 }
 .band-forest {
-  background: radial-gradient(120% 90% at 50% 0%, #31462a, #182415 78%);
+  background: radial-gradient(120% 90% at 50% 0%, #4a3a1e, #241a0c 78%);
 }
 .inner {
   max-width: 1180px;
@@ -583,10 +578,10 @@ body::after {
   inset: 0;
   background: radial-gradient(
     90% 60% at 50% 8%,
-    #efe8cf,
-    #c3ce9e 40%,
-    #7e9161 72%,
-    #3e5232 100%
+    #f6ecca,
+    #ddc98a 40%,
+    #a89454 72%,
+    #5c4a26 100%
   );
 }
 .oval-frame {
@@ -954,12 +949,12 @@ body::after {
 }
 .board {
   position: relative;
-  background: linear-gradient(150deg, #243b21, #16240f);
+  background: linear-gradient(150deg, #3e2f1a, #221808);
   padding: 16px;
   border-radius: 6px 16px 16px 6px;
   box-shadow:
     0 46px 90px -34px rgba(0, 0, 0, 0.85),
-    inset 0 0 0 1px rgba(200, 220, 180, 0.16);
+    inset 0 0 0 1px rgba(224, 202, 156, 0.16);
 }
 .board::before {
   content: "";
@@ -1079,13 +1074,13 @@ body::after {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  border-bottom: 1px solid rgba(60, 72, 44, 0.24);
+  border-bottom: 1px solid rgba(86, 70, 38, 0.24);
   padding-bottom: 8px;
   font-family: var(--util);
   font-size: 0.53rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #6c7350;
+  color: #7a6c45;
 }
 .pg-body {
   flex: 1;
@@ -1097,7 +1092,7 @@ body::after {
   font-family: var(--util);
   font-size: 0.52rem;
   letter-spacing: 0.22em;
-  color: #8a8763;
+  color: #98815b;
   text-align: center;
   padding-top: 8px;
 }
@@ -1107,7 +1102,7 @@ body::after {
   font-size: 2.1rem;
   margin: 0 0 4px;
   line-height: 1.05;
-  color: #23301a;
+  color: #3b2e14;
 }
 .pg h5 {
   font-family: var(--util);
@@ -1121,12 +1116,12 @@ body::after {
   font-family: var(--type);
   font-size: 0.86rem;
   line-height: 1.72;
-  color: #33402a;
+  color: #4a3b22;
 }
 .pg .sig {
   font-family: var(--script);
   font-size: 1.9rem;
-  color: #2b3a22;
+  color: #3b2e14;
   transform: rotate(-3deg);
 }
 .pg-center {
@@ -1150,11 +1145,11 @@ body::after {
   padding: 6px 0;
   font-family: var(--type);
   font-size: 0.82rem;
-  color: #33402a;
+  color: #4a3b22;
 }
 .readout li i {
   flex: 1;
-  border-bottom: 1px dotted rgba(60, 72, 44, 0.5);
+  border-bottom: 1px dotted rgba(86, 70, 38, 0.5);
   transform: translateY(-3px);
 }
 .readout li b {
@@ -1169,7 +1164,7 @@ body::after {
   font-size: clamp(2.4rem, 4.4vw, 3.6rem);
   line-height: 1;
   margin: 12px 0 2px;
-  color: #22301a;
+  color: #3b2e14;
 }
 .conf-ring {
   position: relative;
@@ -1184,7 +1179,7 @@ body::after {
   place-items: center;
   font-family: var(--display);
   font-size: 1.85rem;
-  color: #22301a;
+  color: #3b2e14;
 }
 
 .bands {
@@ -1196,14 +1191,14 @@ body::after {
   align-items: center;
   gap: 10px;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(60, 72, 44, 0.16);
+  border-bottom: 1px solid rgba(86, 70, 38, 0.16);
 }
 .brow .bn {
   font-family: var(--util);
   font-size: 0.53rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #5c6844;
+  color: #6e6240;
 }
 .brow .bv {
   font-family: var(--util);
@@ -1231,7 +1226,7 @@ body::after {
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(60, 72, 44, 0.22);
+  background: rgba(86, 70, 38, 0.22);
 }
 .btrack .ideal {
   position: absolute;
@@ -1260,7 +1255,7 @@ body::after {
 .tl li {
   position: relative;
   padding: 0 0 20px 26px;
-  border-left: 1px solid rgba(60, 72, 44, 0.28);
+  border-left: 1px solid rgba(86, 70, 38, 0.28);
 }
 .tl li:last-child {
   border-left-color: transparent;
@@ -1285,18 +1280,18 @@ body::after {
   font-size: 0.53rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #6c7350;
+  color: #7a6c45;
 }
 .tl .d {
   font-family: var(--display);
   font-size: 1.5rem;
   line-height: 1.15;
-  color: #22301a;
+  color: #3b2e14;
 }
 .tl .n {
   font-family: var(--type);
   font-size: 0.76rem;
-  color: #4a5638;
+  color: #5c4c2c;
   line-height: 1.6;
 }
 

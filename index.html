@@ -254,9 +254,7 @@
   <svg class="watermark" id="wmFoot" viewBox="0 0 1400 220" preserveAspectRatio="none"></svg>
   <div class="inner">
     <div><h4>The Sowing Register</h4><p class="script">grown from soil, sky and a little arithmetic</p></div>
-    <small>Advisory only · confirm with your local extension officer<br>
-      Field photograph: <a href="https://commons.wikimedia.org/wiki/File:Misty_paddy_field_at_Vattathani,_Palakkad.jpg">Navaneethpp</a>,
-      <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons</small>
+    <small>Advisory only · confirm with your local extension officer</small>
   </div>
 </footer>
 
@@ -332,8 +330,8 @@ function readSoilCard(file){
 /* ══════════════ procedural botanicals ══════════════ */
 var NS="http://www.w3.org/2000/svg";
 function E(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e;}
-var GREENS=["#3F5730","#4E6B39","#5F7F46","#728F55","#87A167","#2E4424"];
-var BLOOMS=["#C9AAD0","#8E6C93","#D8ADA8","#E7CBC6","#EFE3C8","#C79E5A"];
+var GREENS=["#6B7A35","#7C8B41","#8FA04E","#A3B25C","#B8C36E","#57652B"];
+var BLOOMS=["#FBF3DC","#F3E3B8","#E8C97E","#E2A87E","#D98E6B","#C9973F"];
 function pick(a,r){return a[Math.floor(r()*a.length)]}
 function rng(seed){return function(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648}}
 
@@ -384,7 +382,7 @@ function stalk(g,x,y,h,color,op,r,withBloom){
     stroke:color,fill:"none","stroke-width":1.6,"stroke-linecap":"round",opacity:op}));
   if(withBloom){
     var bg=E("g",{transform:"translate("+(r()*20-10)+" "+(-h)+")"});
-    bloom(bg,10+r()*10,5+Math.round(r()*2),pick(BLOOMS,r),"#E8D6A2",op);
+    bloom(bg,10+r()*10,5+Math.round(r()*2),pick(BLOOMS,r),"#E4C070",op);
     wrap.appendChild(bg);
   }
 }
@@ -423,7 +421,7 @@ function growColumn(svg,W,H,seed){
   }
   for(i=0;i<9;i++){
     var bx=r()*W*.7,by=r()*H,bg=E("g",{transform:"translate("+bx.toFixed(0)+" "+by.toFixed(0)+")"});
-    bloom(bg,12+r()*16,5+Math.round(r()*2),pick(BLOOMS,r),"#E8D6A2",.7+r()*.3);
+    bloom(bg,12+r()*16,5+Math.round(r()*2),pick(BLOOMS,r),"#E4C070",.7+r()*.3);
     svg.appendChild(bg);
   }
 }
@@ -431,7 +429,7 @@ function growLineArt(svg,W,H,seed,stroke){
   var r=rng(seed); svg.innerHTML=""; var i;
   for(i=0;i<9;i++){
     var g=E("g",{transform:"translate("+(r()*W).toFixed(0)+" "+(r()*H).toFixed(0)+") rotate("+(r()*360).toFixed(0)+")",
-      fill:"none",stroke:stroke||"#6E8552","stroke-width":1.1});
+      fill:"none",stroke:stroke||"#8B9450","stroke-width":1.1});
     var R=26+r()*30,k,pt=5+Math.round(r()*3);
     for(k=0;k<pt;k++)
       g.appendChild(E("path",{d:"M0 0C"+(-R*.44)+" "+(-R*.34)+","+(-R*.34)+" "+(-R*.88)+",0 "+(-R)+
@@ -441,9 +439,9 @@ function growLineArt(svg,W,H,seed,stroke){
   }
   for(i=0;i<6;i++){
     var vg=E("g",{transform:"translate("+(r()*W).toFixed(0)+" "+(r()*H).toFixed(0)+") rotate("+(r()*360).toFixed(0)+")",
-      fill:"none",stroke:stroke||"#6E8552","stroke-width":1.1,opacity:.8});
+      fill:"none",stroke:stroke||"#8B9450","stroke-width":1.1,opacity:.8});
     vine(vg,90+r()*90,"none",1,r);
-    vg.querySelectorAll("path").forEach(function(p){p.setAttribute("fill","none");p.setAttribute("stroke",stroke||"#6E8552")});
+    vg.querySelectorAll("path").forEach(function(p){p.setAttribute("fill","none");p.setAttribute("stroke",stroke||"#8B9450")});
     svg.appendChild(vg);
   }
 }
@@ -458,11 +456,11 @@ growBorder($("#gNear"),1400,420,21,{baseline:420,count:32,min:150,max:400,op:1,w
 growColumn($("#gLeft"),320,1000,53);
 growColumn($("#gRight"),320,1000,88);
 */
-growLineArt($("#wmL"),340,600,11,"#8FA173");
-growLineArt($("#wmR"),320,560,29,"#8FA173");
+growLineArt($("#wmL"),340,600,11,"#B0A468");
+growLineArt($("#wmR"),320,560,29,"#B0A468");
 growLineArt($("#wmForm"),1300,520,41,"#F8F2E4");
-growLineArt($("#wmSoil"),240,240,63,"#6E8552");
-growLineArt($("#wmSky"),240,240,77,"#6E8552");
+growLineArt($("#wmSoil"),240,240,63,"#8B9450");
+growLineArt($("#wmSky"),240,240,77,"#8B9450");
 growColumn($("#wmBookL"),380,900,91);
 growColumn($("#wmBookR"),380,900,17);
 growBorder($("#wmFoot"),1400,220,35,{baseline:220,count:26,min:70,max:180,op:.8,wings:2});
@@ -546,9 +544,9 @@ function drawSpark(days){
   for(i=0;i<days.length;i++){
     var h=Math.max(1.5,(days[i]/max)*(H-8)),x=i*(bw+gap);
     out+='<rect x="'+x.toFixed(1)+'" y="'+(H-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+
-         '" rx="1.5" fill="#4E6B39" opacity="'+(days[i]>.5?.85:.22)+'"/>';
+         '" rx="1.5" fill="#8A7A3A" opacity="'+(days[i]>.5?.85:.22)+'"/>';
   }
-  $("#spark").innerHTML=out+'<line x1="0" y1="55" x2="300" y2="55" stroke="#4E6B39" stroke-opacity=".3"/>';
+  $("#spark").innerHTML=out+'<line x1="0" y1="55" x2="300" y2="55" stroke="#8A7A3A" stroke-opacity=".3"/>';
 }
 
 /* ══════════════ submit — loud failure ══════════════ */
@@ -587,13 +585,13 @@ function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;
 function ring(pct){
   var R=58,C=2*Math.PI*R;   // C ≈ 364.4 — keep in sync with .ring-arc CSS
   return '<div class="conf-ring"><svg viewBox="0 0 132 132" width="132" height="132">'+
-    '<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="#C6C3A4" stroke-width="3"/>'+
-    '<circle class="ring-arc" cx="66" cy="66" r="'+R+'" fill="none" stroke="#4E6B39" stroke-width="3" stroke-linecap="round" '+
+    '<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="#DCCFA4" stroke-width="3"/>'+
+    '<circle class="ring-arc" cx="66" cy="66" r="'+R+'" fill="none" stroke="#A8842F" stroke-width="3" stroke-linecap="round" '+
     'stroke-dasharray="'+C.toFixed(1)+'" style="--arc:'+(C*(1-pct/100)).toFixed(1)+'" transform="rotate(-90 66 66)"/>'+
     '</svg><b>'+pct+'%</b></div>';
 }
 function glyph(name,size){
-  return '<svg viewBox="0 0 60 84" width="'+size+'" height="'+(size*1.4)+'" style="color:#4E6B39;margin:0 auto">'+
+  return '<svg viewBox="0 0 60 84" width="'+size+'" height="'+(size*1.4)+'" style="color:#6E6A32;margin:0 auto">'+
          '<use href="#s-'+name+'"/></svg>';
 }
 function bandRows(f){
@@ -636,10 +634,10 @@ function buildBook(results,inputs){
   /* 1 — title */
   pages.push(pageShell(["The Sowing Register",""],"", 
     '<div class="pg-center">'+
-    '<svg viewBox="-50 -50 100 100" width="76" height="76"><use href="#s-orchid" fill="#7E5B84" opacity=".9"/></svg>'+
+    '<svg viewBox="-50 -50 100 100" width="76" height="76"><use href="#s-orchid" fill="#B26E4B" opacity=".9"/></svg>'+
     '<h5 style="margin-top:18px">Reading no. '+(1000+Math.floor(Math.random()*8999))+'</h5>'+
     '<h4 style="font-size:2.7rem">The Reading</h4>'+
-    '<p class="script" style="font-size:1.5rem;color:#6E8552">for '+esc(place)+'</p>'+
+    '<p class="script" style="font-size:1.5rem;color:#8B9450">for '+esc(place)+'</p>'+
     '<p class="tw" style="margin-top:22px">Taken '+today+'</p>'+
     '<p class="tw" style="opacity:.7;margin-top:26px">turn the page →</p></div>'));
 
@@ -709,7 +707,7 @@ function buildBook(results,inputs){
 
   /* 10 — inside back cover */
   pages.push('<div class="foxing"></div><div class="pg"><div class="pg-center" style="opacity:.35">'+
-    '<svg viewBox="-50 -50 100 100" width="120" height="120"><use href="#s-orchid" fill="#6E8552"/></svg></div></div>');
+    '<svg viewBox="-50 -50 100 100" width="120" height="120"><use href="#s-orchid" fill="#8B9450"/></svg></div></div>');
 
   renderLeaves(pages);
 }
