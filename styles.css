@@ -1166,22 +1166,6 @@ body::after {
   margin: 12px 0 2px;
   color: #3b2e14;
 }
-.conf-ring {
-  position: relative;
-  width: 132px;
-  height: 132px;
-  margin: 0 auto;
-}
-.conf-ring b {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-family: var(--display);
-  font-size: 1.85rem;
-  color: #3b2e14;
-}
-
 .bands {
   margin-top: 6px;
 }
@@ -1347,16 +1331,7 @@ body::after {
    The .lit class is added by JS (on page turn, or IntersectionObserver
    on mobile). All hidden pre-states live inside the no-preference query
    so reduced-motion users always see finished pages. */
-.ring-arc {
-  stroke-dashoffset: var(--arc);
-}
 @media (prefers-reduced-motion: no-preference) {
-  .ring-arc {
-    transition: stroke-dashoffset 1.2s var(--ease) 0.2s;
-  }
-  .face:not(.lit) .ring-arc {
-    stroke-dashoffset: 364.5; /* full circumference = empty ring */
-  }
   .brow,
   .readout li,
   .tl li {
@@ -1387,6 +1362,167 @@ body::after {
   .brow:nth-child(5), .readout li:nth-child(5) { transition-delay: 0.28s; }
   .brow:nth-child(6), .readout li:nth-child(6) { transition-delay: 0.35s; }
   .brow:nth-child(7), .readout li:nth-child(7) { transition-delay: 0.42s; }
+}
+
+/* ── appendices: drop-down pages below the book ── */
+.annex {
+  max-width: 760px;
+  margin: 36px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.annex-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(251, 246, 231, 0.38);
+  border-radius: 8px;
+  color: var(--cream);
+  cursor: pointer;
+  font-family: var(--util);
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 16px 22px;
+  transition: 0.25s var(--ease);
+}
+.annex-btn:hover {
+  background: rgba(251, 246, 231, 0.1);
+  border-color: rgba(251, 246, 231, 0.66);
+}
+.annex-btn .chev {
+  transition: transform 0.3s var(--ease);
+}
+.annex-btn[aria-expanded="true"] .chev {
+  transform: rotate(180deg);
+}
+.annex-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s var(--ease);
+}
+.annex-panel.open {
+  max-height: 1100px;
+}
+/* the page itself — parchment, ruled head, foxing */
+.annex-page {
+  position: relative;
+  background: var(--page);
+  border-radius: 6px;
+  padding: 34px 38px 30px;
+  margin-top: 2px;
+  box-shadow: 0 26px 60px -30px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+.annex-page::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(86, 70, 38, 0.28);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.annex-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background:
+    radial-gradient(6px 4px at 16% 24%, rgba(150, 116, 60, 0.5), transparent),
+    radial-gradient(9px 6px at 78% 70%, rgba(150, 116, 60, 0.42), transparent),
+    radial-gradient(5px 5px at 62% 12%, rgba(150, 116, 60, 0.4), transparent),
+    radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(120, 96, 52, 0.2) 100%);
+}
+.annex-page .ah {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(86, 70, 38, 0.24);
+  padding-bottom: 8px;
+  font-family: var(--util);
+  font-size: 0.53rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #7a6c45;
+}
+.annex-page h4 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.8rem;
+  margin: 16px 0 6px;
+  line-height: 1.1;
+  color: #3b2e14;
+}
+.annex-page .atw {
+  font-family: var(--type);
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: #4a3b22;
+  margin: 0;
+}
+.annex-rows {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+.annex-rows li {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px dotted rgba(86, 70, 38, 0.4);
+  font-family: var(--type);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #4a3b22;
+}
+.annex-rows li:last-child {
+  border-bottom: 0;
+}
+.annex-rows b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: #3b2e14;
+}
+/* numbered measures, roman-styled */
+.measures {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  counter-reset: m;
+}
+.measures li {
+  position: relative;
+  padding: 8px 0 8px 40px;
+  counter-increment: m;
+  font-family: var(--type);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: #4a3b22;
+}
+.measures li::before {
+  content: counter(m, upper-roman);
+  position: absolute;
+  left: 0;
+  top: 8px;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  color: var(--gold);
+}
+@media (max-width: 640px) {
+  .annex-page {
+    padding: 26px 20px 22px;
+  }
+  .annex-rows li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
 }
 
 /* mobile: unfold the book into a stack of pages */

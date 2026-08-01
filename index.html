@@ -246,6 +246,33 @@
         <span class="folio" id="folio">—</span>
         <button class="turn" id="nextBtn" aria-label="Next page">›</button>
       </div>
+
+      <!-- appendices: calendar & regeneration, as drop-down pages -->
+      <div class="annex">
+        <button class="annex-btn" id="nextSowBtn" aria-expanded="false" aria-controls="nextSowPanel">
+          <span>❧ &nbsp;When can this land sow again?</span><span class="chev">▾</span>
+        </button>
+        <div class="annex-panel" id="nextSowPanel" role="region" aria-label="When can this land sow again">
+          <div class="annex-page">
+            <div class="ah"><span>Appendix I</span><span>The next sowing</span></div>
+            <h4>When the ground comes free</h4>
+            <p class="atw" id="nextSowIntro"></p>
+            <ul class="annex-rows" id="nextSowRows"></ul>
+          </div>
+        </div>
+
+        <button class="annex-btn" id="careBtn" aria-expanded="false" aria-controls="carePanel">
+          <span>❧ &nbsp;Helping the land regenerate</span><span class="chev">▾</span>
+        </button>
+        <div class="annex-panel" id="carePanel" role="region" aria-label="Helping the land regenerate">
+          <div class="annex-page">
+            <div class="ah"><span>Appendix II</span><span>Care of the soil</span></div>
+            <h4>Measures for a quicker recovery</h4>
+            <p class="atw" id="careIntro"></p>
+            <ol class="measures" id="careList"></ol>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -582,14 +609,6 @@ function addDays(d,n){var x=new Date(d.getTime());x.setDate(x.getDate()+n);retur
 function fdate(d){return d.toLocaleDateString("en-GB",DF)}
 function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
 
-function ring(pct){
-  var R=58,C=2*Math.PI*R;   // C ≈ 364.4 — keep in sync with .ring-arc CSS
-  return '<div class="conf-ring"><svg viewBox="0 0 132 132" width="132" height="132">'+
-    '<circle cx="66" cy="66" r="'+R+'" fill="none" stroke="#DCCFA4" stroke-width="3"/>'+
-    '<circle class="ring-arc" cx="66" cy="66" r="'+R+'" fill="none" stroke="#A8842F" stroke-width="3" stroke-linecap="round" '+
-    'stroke-dasharray="'+C.toFixed(1)+'" style="--arc:'+(C*(1-pct/100)).toFixed(1)+'" transform="rotate(-90 66 66)"/>'+
-    '</svg><b>'+pct+'%</b></div>';
-}
 function glyph(name,size){
   return '<svg viewBox="0 0 60 84" width="'+size+'" height="'+(size*1.4)+'" style="color:#6E6A32;margin:0 auto">'+
          '<use href="#s-'+name+'"/></svg>';
@@ -624,92 +643,73 @@ function pageShell(head,folio,inner){
          '<div class="pg-body">'+inner+'</div><div class="pg-foot">'+folio+'</div></div>';
 }
 
+var RANKS=["First","Second","Third"], ROMANS=["I","II","III"];
+function cropPage(r,i){
+  return pageShell([ROMANS[i],RANKS[i]+" recommendation"],RANKS[i].toLowerCase()+" choice",
+    '<div style="display:flex;align-items:center;gap:16px">'+glyph(r.crop.glyph,44)+
+    '<div><h5 style="margin:0">'+RANKS[i]+" choice"+'</h5>'+
+    '<div class="crop-big" style="font-size:2.4rem">'+r.crop.name+'</div></div></div>'+
+    '<p class="tw" style="opacity:.8;margin-top:4px">'+r.crop.season+' · '+r.crop.dur+' days to harvest · '+Math.round(r.score*100)+'% fit</p>'+
+    '<p class="tw" style="margin:14px 0">'+explain(r)+'</p>'+
+    '<div class="bands">'+bandRows(r.factors)+'</div>');
+}
+
 function buildBook(results,inputs){
-  var top=results[0], sow=new Date($("#sow").value||Date.now());
-  var harv=addDays(sow,top.crop.dur), next=addDays(harv,top.crop.fallow);
-  var place=$("#loc").value.trim()||"your field";
-  var today=fdate(new Date());
-  var pages=[];
-
-  /* 1 — title */
-  pages.push(pageShell(["The Sowing Register",""],"", 
-    '<div class="pg-center">'+
-    '<svg viewBox="-50 -50 100 100" width="76" height="76"><use href="#s-orchid" fill="#B26E4B" opacity=".9"/></svg>'+
-    '<h5 style="margin-top:18px">Reading no. '+(1000+Math.floor(Math.random()*8999))+'</h5>'+
-    '<h4 style="font-size:2.7rem">The Reading</h4>'+
-    '<p class="script" style="font-size:1.5rem;color:#8B9450">for '+esc(place)+'</p>'+
-    '<p class="tw" style="margin-top:22px">Taken '+today+'</p>'+
-    '<p class="tw" style="opacity:.7;margin-top:26px">turn the page →</p></div>'));
-
-  /* 2 — the field as measured */
-  pages.push(pageShell(["I","The field, as measured"],"two",
-    '<h4>What you gave us</h4><h5>Seven readings</h5>'+
-    '<ul class="readout">'+FEATURES.map(function(F){
-      return '<li><span>'+F.label+'</span><i></i><b>'+inputs[F.key]+F.unit+'</b></li>';
-    }).join("")+'</ul>'+
-    '<p class="tw" style="margin-top:18px">Every crop below is judged against these seven figures and nothing else.</p>'));
-
-  /* 3 — first recommendation */
-  pages.push(pageShell(["II","First recommendation"],"three",
-    '<div class="pg-center">'+glyph(top.crop.glyph,64)+
-    '<h5 style="margin-top:14px">Sow this</h5>'+
-    '<div class="crop-big">'+top.crop.name+'</div>'+
-    '<p class="tw" style="opacity:.8">'+top.crop.season+' · '+top.crop.dur+' days to harvest</p>'+
-    '<div style="margin-top:18px">'+ring(Math.round(top.score*100))+'</div>'+
-    '<h5 style="margin-top:10px">Confidence</h5></div>'));
-
-  /* 4 — why */
-  pages.push(pageShell(["III","Why it fits"],"four",
-    '<h4>Why '+top.crop.name.toLowerCase()+'</h4><h5>Contributing factors</h5>'+
-    '<p class="tw" style="margin-bottom:14px">'+explain(top)+'</p>'+
-    '<div class="bands">'+bandRows(top.factors)+'</div>'+
-    '<p class="tw" style="font-size:.72rem;opacity:.72;margin-top:10px">The shaded band is where this crop prefers to sit. The mark is your field.</p>'));
-
-  /* 5 & 6 — runners up */
-  [1,2].forEach(function(i){
-    var r=results[i];
-    pages.push(pageShell([["IV","V"][i-1],(i===1?"Second":"Third")+" recommendation"],(i===1?"five":"six"),
-      '<div style="display:flex;align-items:center;gap:16px">'+glyph(r.crop.glyph,44)+
-      '<div><h5 style="margin:0">'+(i===1?"Second":"Third")+" choice"+'</h5>'+
-      '<div class="crop-big" style="font-size:2.4rem">'+r.crop.name+'</div></div></div>'+
-      '<p class="tw" style="opacity:.8;margin-top:4px">'+r.crop.season+' · '+r.crop.dur+' days · '+Math.round(r.score*100)+'% confidence</p>'+
-      '<p class="tw" style="margin:14px 0">'+explain(r)+'</p>'+
-      '<div class="bands">'+bandRows(r.factors)+'</div>'));
-  });
-
-  /* 7 — calendar */
-  pages.push(pageShell(["VI","The calendar"],"seven",
-    '<h4>When the ground is free</h4><h5>If you sow '+top.crop.name.toLowerCase()+'</h5>'+
-    '<ul class="tl">'+
-    '<li class="fill"><div class="k">Sow</div><div class="d">'+fdate(sow)+'</div><div class="n">The field is committed from this date.</div></li>'+
-    '<li><div class="k">Harvest</div><div class="d">'+fdate(harv)+'</div><div class="n">'+top.crop.dur+' days in the ground.</div></li>'+
-    (top.crop.fallow===0
-      ? '<li><div class="k">Next sowing</div><div class="d">Not this year</div><div class="n">A perennial — the field stays under this crop for several cycles.</div></li>'
-      : '<li><div class="k">Next sowing</div><div class="d">'+fdate(next)+'</div><div class="n">'+top.crop.fallow+' days of rest and land preparation after harvest.</div></li>')+
-    '</ul>'));
-
-  /* 8 — after */
-  pages.push(pageShell(["VII","After this crop"],"eight",
-    '<h4>What follows</h4><h5>Rotation</h5>'+
-    '<p class="tw">'+(top.crop.fallow===0
-      ? esc(top.crop.name)+' holds the land well beyond a single season. Plan any second crop on a different plot, or intercrop in the early years while the canopy is still open.'
-      : (top.crop.glyph==="pod"
-        ? 'This is a legume, so it leaves nitrogen behind in the soil. A cereal — maize or rice — will take that up well next season.'
-        : 'This crop draws heavily on the soil. Following it with a legume such as chickpea or mung bean will help put nitrogen back before the next heavy feeder.'))+'</p>'+
-    '<p class="tw" style="margin-top:14px">Whatever you choose, take a fresh soil test before the next sowing. One season changes the numbers on this page more than most people expect.</p>'));
-
-  /* 9 — closing */
-  pages.push(pageShell(["","In closing"],"nine",
-    '<div class="pg-center">'+
-    '<p class="tw" style="max-width:30ch">This reading is advice, not instruction. Your own eyes on your own land still know things the seven numbers do not.</p>'+
-    '<p class="sig" style="margin-top:34px">The Sowing Register</p>'+
-    '<p class="tw" style="font-size:.7rem;opacity:.7;margin-top:8px">'+today+'</p></div>'));
-
-  /* 10 — inside back cover */
+  /* the book holds only the three recommendations —
+     calendar & regeneration live in the appendix drop-downs below it */
+  var pages=results.map(cropPage);
   pages.push('<div class="foxing"></div><div class="pg"><div class="pg-center" style="opacity:.35">'+
     '<svg viewBox="-50 -50 100 100" width="120" height="120"><use href="#s-orchid" fill="#8B9450"/></svg></div></div>');
-
   renderLeaves(pages);
+  buildAnnex(results);
+}
+
+/* ─── the appendices ─── */
+function buildAnnex(results){
+  var sow=new Date($("#sow").value||Date.now());
+  var top=results[0].crop;
+
+  /* I — when can the land sow again */
+  $("#nextSowIntro").textContent="Counted from your intended sowing date of "+fdate(sow)+
+    ". Each crop keeps the ground for its growing days, then asks a rest before the land takes seed again.";
+  $("#nextSowRows").innerHTML=results.map(function(r){
+    var c=r.crop,harv=addDays(sow,c.dur);
+    if(c.fallow===0)
+      return '<li><b>'+c.name+'</b><span>a perennial — it keeps this plot for years to come. '+
+        'Plan any second crop on different ground.</span></li>';
+    var next=addDays(harv,c.fallow);
+    return '<li><b>'+c.name+'</b><span>harvest around '+fdate(harv)+' · '+c.fallow+
+      ' days of rest · the land is ready again from <b>'+fdate(next)+'</b></span></li>';
+  }).join("");
+
+  /* II — helping the land regenerate */
+  var intro, steps;
+  if(top.fallow===0){
+    intro=top.name+" holds this land season after season, so regeneration happens between the rows rather than between crops.";
+    steps=[
+      "Mulch the rows generously — cut grass, straw or leaf litter — to hold moisture and feed the soil life.",
+      "While the canopy is young, intercrop with legumes — mung bean or cowpea — to fix nitrogen between the rows.",
+      "Give farmyard manure or compost every year at the break of the season, worked in lightly at the drip line.",
+      "Keep the ground covered, never bare — a living floor of green manure beats clean-hoed earth.",
+      "Take a soil test every year or two; a standing crop hides slow changes underground."
+    ];
+  }else{
+    intro = top.glyph==="pod"
+      ? top.name+" is a legume — it feeds the ground as it grows and leaves nitrogen behind. These measures bank that gift for the crop that follows."
+      : top.name+" draws heavily on the soil, and the rest window after harvest is short. These measures make it count.";
+    steps=[
+      "Sow a green-manure crop — dhaincha or sunn hemp — in the rest window, and plough it in before it flowers.",
+      "Spread farmyard manure or compost, five to ten cartloads an acre, a fortnight before the next sowing.",
+      "Leave the stubble standing and mulch the residue where it lies — never burn it; it is next season's humus.",
+      "Keep tillage light during the rest days, so the soil's structure and its earthworms survive to work for you.",
+      (top.glyph==="pod"
+        ? "Follow this legume with a cereal — maize or rice will drink up the nitrogen it leaves behind."
+        : "Follow this crop with a legume — chickpea or mung bean — to fix nitrogen back into the ground."),
+      "Take a fresh soil test before the next sowing. One season changes the numbers more than most people expect."
+    ];
+  }
+  $("#careIntro").textContent=intro;
+  $("#careList").innerHTML=steps.map(function(s){return '<li>'+s+'</li>'}).join("");
 }
 
 /* ─── leaf plumbing ─── */
@@ -763,7 +763,8 @@ function flipTo(k){
 }
 function folio(){
   var N=LEAVES.length;
-  $("#folio").textContent = CUR===0 ? "Cover · 1 of "+(N*2) : "Pages "+(CUR*2)+"–"+(CUR*2+1);
+  var labels=["The first choice","The second & third","The back cover"];
+  $("#folio").textContent = labels[Math.min(CUR,labels.length-1)];
   $("#prevBtn").disabled = CUR===0;
   $("#nextBtn").disabled = CUR>=N;
 }
@@ -774,6 +775,27 @@ addEventListener("keydown",function(e){
   if(e.key==="ArrowRight") flipTo(CUR+1);
   if(e.key==="ArrowLeft")  flipTo(CUR-1);
 });
+
+/* appendix drop-downs — an accordion of two */
+(function(){
+  var items=[
+    {btn:$("#nextSowBtn"),panel:$("#nextSowPanel")},
+    {btn:$("#careBtn"),panel:$("#carePanel")}
+  ];
+  items.forEach(function(it){
+    it.btn.addEventListener("click",function(){
+      var opening=!it.panel.classList.contains("open");
+      items.forEach(function(o){
+        o.panel.classList.remove("open");
+        o.btn.setAttribute("aria-expanded","false");
+      });
+      if(opening){
+        it.panel.classList.add("open");
+        it.btn.setAttribute("aria-expanded","true");
+      }
+    });
+  });
+})();
 
 /* swipe or tap the book itself (desktop / tablet book mode only —
    on phones the book unrolls into a scrolling stack) */
