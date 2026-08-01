@@ -152,11 +152,6 @@
     <!-- ═══ HERO ═══ -->
     <header class="hero">
       <div class="hero-sky"></div>
-      <!--   <svg class="hero-far"  id="gFar"  viewBox="0 0 1400 300" preserveAspectRatio="xMidYMin slice"></svg>
-  <svg class="hero-near" id="gNear" viewBox="0 0 1400 420" preserveAspectRatio="xMidYMax slice"></svg>
-  <svg class="hero-side l" id="gLeft"  viewBox="0 0 320 1000" preserveAspectRatio="xMinYMid slice"></svg>
-  <svg class="hero-side r" id="gRight" viewBox="0 0 320 1000" preserveAspectRatio="xMinYMid slice"></svg>
- -->
       <div class="petals" id="petals"></div>
 
       <div class="arch">
@@ -1314,12 +1309,6 @@
         return Array.prototype.slice.call(document.querySelectorAll(s));
       }
 
-      /* hero garden layers retired in favour of the photograph — uncomment to bring them back
-growBorder($("#gFar"),1400,300,7,{baseline:300,count:20,min:120,max:280,op:.75,wings:0});
-growBorder($("#gNear"),1400,420,21,{baseline:420,count:32,min:150,max:400,op:1,wings:4});
-growColumn($("#gLeft"),320,1000,53);
-growColumn($("#gRight"),320,1000,88);
-*/
       growLineArt($("#wmL"), 340, 600, 11, "#B0A468");
       growLineArt($("#wmR"), 320, 560, 29, "#B0A468");
       growLineArt($("#wmForm"), 1300, 520, 41, "#F8F2E4");
@@ -1562,12 +1551,6 @@ growColumn($("#gRight"),320,1000,88);
       function fdate(d) {
         return d.toLocaleDateString("en-GB", DF);
       }
-      function esc(s) {
-        return String(s).replace(/[&<>]/g, function (c) {
-          return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c];
-        });
-      }
-
       function glyph(name, size) {
         return (
           '<svg viewBox="0 0 60 84" width="' +

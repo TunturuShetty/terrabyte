@@ -63,7 +63,6 @@
 :root {
   /* golden-hour palette — warm honey/amber, brighter than the old forest greens */
   --cream: #fbf6e7;
-  --parchment: #f3e7c9;
   --page: #f8efd8;
   --fern: #8b9450;
   --moss: #6b7038;
@@ -122,9 +121,6 @@ svg {
   font-family: var(--script);
   font-weight: 400;
   line-height: 1.25;
-}
-.num {
-  font-variant-numeric: tabular-nums;
 }
 :focus-visible {
   outline: 2px solid var(--gold);
@@ -239,9 +235,6 @@ body::after {
   .nav {
     padding: 12px 18px;
   }
-  .nav-brand {
-    text-align: left;
-  }
   .nav-brand b {
     font-size: 0.95rem;
   }
@@ -249,7 +242,6 @@ body::after {
     display: none;
   }
   .nav .pill {
-    flex-shrink: 0;
     padding: 10px 18px;
   }
 }
@@ -272,51 +264,6 @@ body::after {
   inset: 0;
   z-index: -4;
   background: #7a6a3e url("assets/hero-lake.jpg") center / cover no-repeat;
-}
-
-/* procedural garden layers retired — the photograph carries the hero now.
-   Set display back to block to bring them back. */
-.hero-far,
-.hero-near {
-  display: none;
-  position: absolute;
-  left: -4%;
-  width: 108%;
-  z-index: -2;
-  pointer-events: none;
-}
-.hero-far {
-  top: -2%;
-  filter: blur(2.2px);
-  opacity: 0.62;
-}
-.hero-near {
-  bottom: -1%;
-  z-index: -1;
-}
-.hero-side {
-  display: none;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 28vw;
-  max-width: 360px;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.95;
-}
-.hero-side.l {
-  left: -3%;
-}
-.hero-side.r {
-  right: -3%;
-  transform: scaleX(-1);
-}
-@media (max-width: 900px) {
-  .hero-side {
-    width: 46vw;
-    opacity: 0.75;
-  }
 }
 
 .arch {
@@ -558,21 +505,6 @@ body::after {
 .band-olive .sec-head .script,
 .band-forest .sec-head .script {
   color: var(--orchid-lt);
-}
-
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  justify-content: center;
-  margin: 0 auto;
-  max-width: 560px;
-}
-.divider i {
-  flex: 1;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.28;
 }
 
 /* philosophy */
@@ -1132,14 +1064,6 @@ body::after {
   text-align: center;
   padding-top: 5px;
 }
-.pg h4 {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 2.1rem;
-  margin: 0 0 4px;
-  line-height: 1.05;
-  color: #3b2e14;
-}
 .pg h5 {
   font-family: var(--util);
   font-size: 0.56rem;
@@ -1154,12 +1078,6 @@ body::after {
   line-height: 1.72;
   color: #4a3b22;
 }
-.pg .sig {
-  font-family: var(--script);
-  font-size: 1.9rem;
-  color: #3b2e14;
-  transform: rotate(-3deg);
-}
 .pg-center {
   display: flex;
   flex-direction: column;
@@ -1167,31 +1085,6 @@ body::after {
   justify-content: center;
   text-align: center;
   height: 100%;
-}
-
-.readout {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.readout li {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 6px 0;
-  font-family: var(--type);
-  font-size: 0.82rem;
-  color: #4a3b22;
-}
-.readout li i {
-  flex: 1;
-  border-bottom: 1px dotted rgba(86, 70, 38, 0.5);
-  transform: translateY(-3px);
-}
-.readout li b {
-  font-weight: 400;
-  font-family: var(--display);
-  font-size: 1.15rem;
 }
 
 .crop-big {
@@ -1267,54 +1160,6 @@ body::after {
   background: #a8452f;
 }
 
-.tl {
-  list-style: none;
-  margin: 14px 0 0;
-  padding: 0;
-}
-.tl li {
-  position: relative;
-  padding: 0 0 20px 26px;
-  border-left: 1px solid rgba(86, 70, 38, 0.28);
-}
-.tl li:last-child {
-  border-left-color: transparent;
-  padding-bottom: 0;
-}
-.tl li::before {
-  content: "";
-  position: absolute;
-  left: -5px;
-  top: 5px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--page);
-  border: 1px solid var(--moss);
-}
-.tl li.fill::before {
-  background: var(--moss);
-}
-.tl .k {
-  font-family: var(--util);
-  font-size: 0.53rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: #7a6c45;
-}
-.tl .d {
-  font-family: var(--display);
-  font-size: 1.5rem;
-  line-height: 1.15;
-  color: #3b2e14;
-}
-.tl .n {
-  font-family: var(--type);
-  font-size: 0.76rem;
-  color: #5c4c2c;
-  line-height: 1.6;
-}
-
 .controls {
   display: flex;
   align-items: center;
@@ -1368,16 +1213,12 @@ body::after {
    on mobile). All hidden pre-states live inside the no-preference query
    so reduced-motion users always see finished pages. */
 @media (prefers-reduced-motion: no-preference) {
-  .brow,
-  .readout li,
-  .tl li {
+  .brow {
     transition:
       opacity 0.55s var(--ease),
       transform 0.55s var(--ease);
   }
-  .face:not(.lit) .brow,
-  .face:not(.lit) .readout li,
-  .face:not(.lit) .tl li {
+  .face:not(.lit) .brow {
     opacity: 0;
     transform: translateX(-12px);
   }
@@ -1392,30 +1233,22 @@ body::after {
     transform: translateX(-22px);
   }
   /* stagger rows top to bottom */
-  .brow:nth-child(2),
-  .readout li:nth-child(2),
-  .tl li:nth-child(2) {
+  .brow:nth-child(2) {
     transition-delay: 0.07s;
   }
-  .brow:nth-child(3),
-  .readout li:nth-child(3),
-  .tl li:nth-child(3) {
+  .brow:nth-child(3) {
     transition-delay: 0.14s;
   }
-  .brow:nth-child(4),
-  .readout li:nth-child(4) {
+  .brow:nth-child(4) {
     transition-delay: 0.21s;
   }
-  .brow:nth-child(5),
-  .readout li:nth-child(5) {
+  .brow:nth-child(5) {
     transition-delay: 0.28s;
   }
-  .brow:nth-child(6),
-  .readout li:nth-child(6) {
+  .brow:nth-child(6) {
     transition-delay: 0.35s;
   }
-  .brow:nth-child(7),
-  .readout li:nth-child(7) {
+  .brow:nth-child(7) {
     transition-delay: 0.42s;
   }
 }
